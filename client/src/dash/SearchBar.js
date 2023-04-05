@@ -1,0 +1,102 @@
+import React, { useState,useEffect } from 'react';
+
+export default function SearchBar({groupId,currentUser,reRender}) {
+  const[people,setPeople]=useState([])
+  
+  const [query, setQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [more,setMore]= useState(true)
+
+
+  useEffect(() => {
+    fetch('http://localhost:3500/users/getAll')
+      .then(response => response.json())
+      .then(data => {
+        console.log(data)
+        const list = data.map(x=>x.username)
+        setPeople(list)
+      })
+      .catch(err => console.log(err));
+    console.log("call two")
+  }, []);
+  
+
+  function handleQueryChange(event) {
+    const newQuery = event.target.value;
+    setQuery(newQuery);
+
+    console.log(people)
+    let results = people.filter((person) =>
+      person.toLowerCase().includes(newQuery.toLowerCase())
+    );
+    const index = results.indexOf(currentUser);
+    results.splice(index, 1);
+    setSearchResults(results);
+  }
+
+  function addUser(){
+    if(!people.includes(query)){
+      alert("Not registered user")
+    }
+    else{
+      fetch("http://localhost:3500/group/add", {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify({
+                "user":query,
+                "groupId":groupId
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            reRender()
+        })
+        .catch(err => console.log(err));
+    }
+  }
+
+  const inputStyle= `${searchResults.length > 0? "rounded-none rounded-t-md"
+  : "rounded-md"
+} focus:outline-none border-2 p-1.5 placeholder-ml-4 border-purple mt-2`
+
+  return (
+    <div>
+
+    {more?
+      (
+        <div>
+        <input
+          type="text"
+          value={query}
+          onChange={handleQueryChange}
+          placeholder="Search people..."
+          className={inputStyle}
+        />
+        <ul className="border w-48 mx-auto border-hoverGray rounded-b-md divide-y divide-hoverGray">
+          {searchResults.slice(0, 3).map((person) => (
+            <li onClick={()=>setQuery(person)}
+              key={person.id}
+              className="px-4 py-2 hover:cursor-pointer hover:bg-hoverGray"
+            >
+              {person}
+            </li>
+          ))}
+      </ul>
+      <button onClick={addUser} className="hover:bg-darkPurple rounded-md bg-purple px-4  text-white mb-1  mt-2">add member</button> 
+      <div>
+        <button onClick={()=>setMore(false)}  className="text-red">Cancel</button>
+      </div>
+
+      </div>
+      )
+      :
+      <button onClick={()=>setMore(true)} className="hover:bg-darkPurple text-m rounded-md bg-purple px-20  text-white mb-8  mt-2">+</button> 
+
+    }
+    </div>
+
+  )
+}

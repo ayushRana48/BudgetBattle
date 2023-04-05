@@ -1,0 +1,19 @@
+20230327	16:45:48	ae02018b-8e1a-4326-bd14-64fa3b8f2a4d	Error: ENOENT: no such file or directory, stat '/Users/aryarana/Desktop/plaid_app/views/404.html'
+20230327	16:47:21	7b3b9caf-8c17-415f-b90c-b8a86372ea4e	Error: Not allowed by CORS
+20230327	16:47:21	6fc3e6a0-9e1a-4e95-a87b-2634b662bbd0	Error: Not allowed by CORS
+20230327	16:47:21	b1d7cb62-10f4-464c-a1f3-1227166d3205	Error: Not allowed by CORS
+20230327	16:47:50	2de7eea9-eed9-45b0-b7f3-bfe50b31ff38	Error: Not allowed by CORS
+20230327	16:47:50	cf58fc7b-0240-4206-88be-b11e2a7f92ad	Error: Not allowed by CORS
+20230327	16:47:50	41951845-b802-416d-b823-0e9148495b4f	Error: Not allowed by CORS
+20230327	16:48:27	3b0c79f8-93cd-4ea5-8697-814bb055b883	Error: Not allowed by CORS
+20230327	16:48:27	e33a12aa-2550-4e6c-9ae9-b9eaa316748d	Error: Not allowed by CORS
+20230327	16:48:27	a1ee6a43-a962-4585-a43b-637d68dd6484	Error: Not allowed by CORS
+20230327	17:40:49	dcf2dd63-e502-45f9-8ac1-6b31e440f028	Error: ENOENT: no such file or directory, stat '/Users/aryarana/Desktop/plaid_app/views/404.html'
+20230327	17:40:53	03bc8243-e48e-4b72-8c3f-25dfee58f075	Error: ENOENT: no such file or directory, stat '/Users/aryarana/Desktop/plaid_app/views/404.html'
+20230327	17:41:30	f530df15-0a8c-4252-91d2-ab61becd922f	Error: ENOENT: no such file or directory, stat '/Users/aryarana/Desktop/plaid_app/views/404.html'
+20230329	22:07:37	6f76f084-537c-4014-beeb-578ae76682a0	MongooseError: Model.findOneAndUpdate() no longer accepts a callback
+20230329	22:07:37	a8f7735a-7b7b-4739-a3cd-062a18262f98	MongooseError: Model.findOneAndUpdate() no longer accepts a callback
+20230403	13:29:54	7cc7ac74-b7b8-40c9-9547-98b6fe9b04ff	SyntaxError: Unexpected token o in JSON at position 1
+20230403	13:31:39	5a822fc4-f80c-4cf4-a4fb-b00202c1710b	SyntaxError: Unexpected token o in JSON at position 1
+20230404	03:37:38	4902571d-18e9-4c6e-8cd2-d7a44507da5e	ReferenceError: Group is not defined
+20230404	03:37:43	3dfd901e-a1da-4492-85dd-38d2c8754576	ReferenceError: Group is not defined
