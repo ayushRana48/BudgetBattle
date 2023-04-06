@@ -1,9 +1,9 @@
 import React, { useState,useEffect } from 'react';
 
-export default function SearchBar({groupId,currentUser,reRender}) {
+export default function SearchBar({groupId,currentUser,reRender,groupName}) {
   const[people,setPeople]=useState([])
   
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState();
   const [searchResults, setSearchResults] = useState([]);
   const [more,setMore]= useState(true)
 
@@ -25,27 +25,36 @@ export default function SearchBar({groupId,currentUser,reRender}) {
     const newQuery = event.target.value;
     setQuery(newQuery);
 
-    console.log(people)
+    const index = people.indexOf(currentUser);
+    if(index !=-1){
+      people.splice(index, 1);
+
+    }    
     let results = people.filter((person) =>
-      person.toLowerCase().includes(newQuery.toLowerCase())
+      person.toLowerCase().includes(newQuery.toLowerCase()
+      || person.toLowerCase()==newQuery.toLowerCase())
     );
-    const index = results.indexOf(currentUser);
-    results.splice(index, 1);
+    // 
+    // 
     setSearchResults(results);
+    console.log(results)
+
   }
 
-  function addUser(){
+  function sendInvite(){
     if(!people.includes(query)){
       alert("Not registered user")
     }
     else{
-      fetch("http://localhost:3500/group/add", {
+      fetch("http://localhost:3500/users/sendInvite", {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
             body:JSON.stringify({
-                "user":query,
+                "inviter":currentUser,
+                "invitee":query,
+                "groupName":groupName,
                 "groupId":groupId
             }),
         })
@@ -85,7 +94,7 @@ export default function SearchBar({groupId,currentUser,reRender}) {
             </li>
           ))}
       </ul>
-      <button onClick={addUser} className="hover:bg-darkPurple rounded-md bg-purple px-4  text-white mb-1  mt-2">add member</button> 
+      <button onClick={sendInvite} className="hover:bg-darkPurple rounded-md bg-purple px-4  text-white mb-1  mt-2">send invite</button> 
       <div>
         <button onClick={()=>setMore(false)}  className="text-red">Cancel</button>
       </div>
