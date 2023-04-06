@@ -10,4 +10,10 @@ router.put('/updateUserBankInfo',userController.updateBankInfo)
 
 router.get('/getGroups',userController.getUserGroups)
 
+router.put('/sendInvite',userController.sendInvite)
+router.get('/getAllInvites',userController.getAllInvites)
+router.put('/acceptInvites',userController.acceptInvites)
+
+
+
 module.exports = router;

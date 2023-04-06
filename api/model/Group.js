@@ -14,7 +14,9 @@ const groupSchema = new Schema({
         type:String,
         required: true
     },
-
+    sentInvites:[{
+        type: String
+    }],
     guests: [{
         type: String
     }],

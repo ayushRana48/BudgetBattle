@@ -26,6 +26,27 @@ const userSchema = new Schema({
             },
         }
     }]
+    ,
+    groupInvites: [{
+        inviter:{
+            type:String,
+            required: function () {
+                return this.groups.length > 0;
+            }
+        },
+        groupName:{
+            type:String,
+            required: function () {
+                return this.groups.length > 0;
+            },
+        },
+        groupId:{
+            type:String,
+            required: function () {
+                return this.groups.length > 0;
+            },
+        }
+    }]
 });
 
 module.exports = mongoose.model('User', userSchema);

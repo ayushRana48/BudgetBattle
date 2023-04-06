@@ -76,7 +76,16 @@ const getAllMembers = async (req,res)=>{
   res.json({host:group.host,guests:group.guests})
 }
 
+const getAllInvites = async (req,res)=>{
+  const parsedUrl=url.parse(req.url)
+  const parsedQuery=querystring.parse(parsedUrl.query)
+
+  const groupId=parsedQuery.groupId
+  const group=await Group.findOne({groupId:groupId}).exec();
+  res.json({invites:group.sentInvites})
+}
 
 
 
-module.exports = { handleNewGroup,addMember, getAll,getAllMembers };
+
+module.exports = { handleNewGroup,addMember, getAll,getAllMembers,getAllInvites };
