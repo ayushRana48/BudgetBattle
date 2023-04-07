@@ -116,7 +116,9 @@ const getAllInvites=async(req,res)=>{
 const acceptInvites = async (req, res) => {
   const { user, groupId, groupName } = req.body;
 
-  const inGroup= foundGroup ? foundGroup.guests.includes(user):false
+  const foundGroup1 = await Group.findOne({groupId:groupId}).exec();
+
+  const inGroup= foundGroup1 ? foundGroup1.guests.includes(user):false
   if (inGroup) {
     return res.status(409).json({ error: 'Already in Group' });
   }

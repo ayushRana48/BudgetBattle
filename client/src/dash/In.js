@@ -4,14 +4,16 @@ import axios from "axios";
 import Transactions from "./Transactions";
 import Logout from "./Logout";
 import MyGroups from "./MyGroups";
+import MyInvites from "./MyInvites";
 
 
 export default function In({currentUser,resetUser,getGroups}){
 
     return(
-      <div>
+      <div className="">
         <Logout resetUser={resetUser}></Logout>
-        <MyGroups currentUser={currentUser} getGroups={getGroups}></MyGroups>
+        <MyGroups className="bg-red min-width-40"currentUser={currentUser} getGroups={getGroups}></MyGroups>
+
         <Transactions currentUser={currentUser} resetUser={resetUser}></Transactions>
       </div>
     

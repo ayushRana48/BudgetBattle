@@ -4,6 +4,7 @@ import axios from "axios";
 import Transactions from "./Transactions";
 import NewGroup from "./NewGroup"
 import GroupClick from "./GroupClick";
+import MyInvites from "./MyInvites";
 
 
 export default function MyGroup({currentUser,getGroups}){
@@ -56,10 +57,15 @@ export default function MyGroup({currentUser,getGroups}){
     const groupsList = userGroups.map(x=><GroupClick currentUser={currUser} groupName={x.groupName} groupId={x.groupId}></GroupClick>)
 
     return(
-        <div>
-            <h1 className="mb-8 text-lg">My Groups</h1>
+
+        
+        <div className="">
+            <h1 className="mb-8 text-lg"><span className="text-purple">{currentUser}'s</span> Groups</h1>
             {groupsList.length==0?<h1>no groups</h1>:groupsList}
-            <NewGroup currentUser={currUser} reRender={reRender}></NewGroup>     
+            <NewGroup currentUser={currUser} reRender={reRender}></NewGroup>  
+            <MyInvites className="" currentUser={currentUser} reRenderGroups={reRender}></MyInvites>
+
         </div>
+
     ) 
 }

@@ -8,8 +8,8 @@ module.exports = {
       'white':"#FFFFFF",
       'hoverGray':"#D4DADB",
       'darkPurple':"#5B0BCB",
-      'red':"#FF6C6C"
-      
+      'red':"#FF6C6C",
+      'green':"#7AD8A0",      
     },
     fontSize:
     {
