@@ -85,7 +85,70 @@ const getAllInvites = async (req,res)=>{
   res.json({invites:group.sentInvites})
 }
 
+const leaveGroup = async (req,res) =>{
+  const {groupId,user} = req.body;
+  const foundUser = await User.findOne({username:user}).exec();
+
+  if (!foundUser) return res.status(401).json("User not found"); 
+  const foundGroup = await Group.findOne({groupId:groupId}).exec();
+  let groupUpdate;
+
+  if((foundGroup && !foundGroup.guests.includes(user)) && (foundGroup && foundGroup.host!=user))return res.status(401).json("User not in group"); 
+
+  if(foundGroup && foundGroup.host==user){
+    if(foundGroup && foundGroup.guests.length==0) return res.status(401).json("Can't leave group as last member"); 
+    groupUpdate = {
+      host:foundGroup.guests[0],
+      $pull: { guests:foundGroup.guests[0] }
+    };
+  }
+  else{
+    groupUpdate={ $pull: { guests: user }}
+  }
+    const updatedGroup = await Group.findOneAndUpdate({"groupId":groupId}, groupUpdate, {new: true});
+    const updatedUser = await User.findOneAndUpdate(
+        { username: user },
+        { $pull: { groups: { groupId: groupId, groupName: foundGroup.groupName } } },
+        { new: true }
+      );
+    res.json({
+      group: updatedGroup,
+      user: updatedUser
+    });
+}
+
+const leaveDeleteGroup = async (req,res)=>{
+  const {groupId,user} = req.body;
+  const foundUser = await User.findOne({username:user}).exec();
+
+  if (!foundUser) return res.status(401).json("User not found"); 
+  const foundGroup = await Group.findOne({groupId:groupId}).exec();
+
+  if((foundGroup && !foundGroup.guests.includes(user)) && (foundGroup && foundGroup.host!=user))return res.status(401).json("User not in group"); 
+  if(foundGroup && (foundGroup.host!=foundUser && foundGroup.guests.length!=0)) return res.status(401).json("Can't delete group"); 
+
+  Group.deleteOne(foundGroup)
+  .then(() => {
+    console.log('Deleted group');
+  })
+  .catch((err) => {
+    console.error(err);
+  });
 
 
+  const updatedUser = await User.findOneAndUpdate(
+    { username: user },
+    { $pull: { groups: { groupId: groupId, groupName: foundGroup.groupName } } },
+    { new: true }
+  );
 
-module.exports = { handleNewGroup,addMember, getAll,getAllMembers,getAllInvites };
+  res.json({
+    group: Group,
+    user: updatedUser
+  });
+}
+
+
+module.exports = { handleNewGroup,addMember, getAll,
+  getAllMembers,getAllInvites,leaveGroup,
+  leaveDeleteGroup };

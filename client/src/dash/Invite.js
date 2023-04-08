@@ -29,6 +29,29 @@ export default function Invite({currentUser,groupName,groupId,inviter,reRenderIn
         })
         .catch(err => console.log(err));
     }
+
+    function declineInvite(){
+        const url = `http://localhost:3500/users/declineInvite`;
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify({
+                "user":currentUser,
+                "groupName":groupName,
+                "groupId":groupId
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            reRenderInvites()
+        })
+        .catch(err => console.log(err));
+    }
+
+
     return(
         <div className="hover:cursor-pointer"> 
             <div className="mx-auto w-[40%] p-2 hover:bg-hoverGray ">
@@ -40,7 +63,7 @@ export default function Invite({currentUser,groupName,groupId,inviter,reRenderIn
                 </div>
                     <div className="flex ml-auto mr-1 gap-x-1"> 
                         <img onClick={acceptInvite} className="w-12 h-10 mt-2 p-1 hover:bg-green hover:cursor-pointer rounded-md" src="/inviteClick/Yes.svg"></img>
-                        <img className="w-12 h-10 mt-2 p-1 hover:bg-red hover:cursor-pointer rounded-md" src="/inviteClick/No.svg"></img>
+                        <img onClick={declineInvite} className="w-12 h-10 mt-2 p-1 hover:bg-red hover:cursor-pointer rounded-md" src="/inviteClick/No.svg"></img>
 
                     </div>
             </div>

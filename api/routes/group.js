@@ -7,8 +7,8 @@ router.put('/add', groupController.addMember);
 router.get('/getAll', groupController.getAll);
 router.get('/getAllMembers', groupController.getAllMembers);
 router.get('/getAllInvites', groupController.getAllInvites);
-
-
+router.put('/leaveGroup', groupController.leaveGroup);
+router.put('/leaveDeleteGroup', groupController.leaveDeleteGroup);
 
 
 

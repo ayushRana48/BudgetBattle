@@ -160,6 +160,40 @@ const acceptInvites = async (req, res) => {
 };
 
 
+const declineInvite = async (req,res)=>{
+    const { user, groupId, groupName } = req.body;
+
+    const userUpdate = {
+      $pull: { groupInvites: { groupId, groupName } },
+    };
+  
+    const groupUpdate = {
+      $pull: { sentInvites:user },
+    };
+  
+    const options = { new: true };
+
+    const foundUser = await User.findOneAndUpdate(
+      { username: user },
+      userUpdate,
+      options
+    ).exec();
+  
+    if (!foundUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+  
+    const foundGroup = await Group.findOneAndUpdate(
+      { groupId: groupId },
+      groupUpdate,
+      options
+    ).exec();
+
+    res.json({user:foundUser,group:foundGroup})
+}
+
+
 
 module.exports = { getAllUsers,updateBankInfo,getUserInfo,
-  getUserGroups,sendInvite,getAllInvites,acceptInvites};
+  getUserGroups,sendInvite,getAllInvites,acceptInvites,
+  declineInvite};
