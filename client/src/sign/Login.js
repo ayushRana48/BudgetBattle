@@ -45,7 +45,7 @@ export default function Login({getCurrentUser}){
         <button className="mt-4 border rounded-md bg-purple px-4 py-1 text-white border-purple" onClick={logIn}>login</button>
         
     </div>
-    <div class="flex items-center mt-4 justify-center mx-auto">
+    <div class="flex items-center mt-8 justify-center mx-auto">
       <div class="h-1 w-80 bg-hoverGray"></div>
       <h1 class="mx-2 text-m">or</h1>
       <div class="h-1 w-80 bg-hoverGray"></div>
@@ -53,7 +53,6 @@ export default function Login({getCurrentUser}){
     <div className="mt-4">
       <Register getCurrentUser={getCurrentUser}></Register>
     </div>
-      
     </div>
 
     )

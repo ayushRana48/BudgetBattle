@@ -22,13 +22,20 @@ export default function MyGroup({currentUser,getGroups}){
     },[])
 
     useEffect(()=>{
+        console.log("user from IN")
+        setCurrUser(currUser)
+        console.log(currentUser)
+
+      },[currentUser,currUser])
+
+    useEffect(()=>{
         console.log("current User from groups")
-        console.log(currUser)
-        const url = `http://localhost:3500/users/getGroups?username=${currUser}`;
+        console.log(currentUser)
+        const url = `http://localhost:3500/users/getGroups?username=${currentUser}`;
         fetch(url, {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${currUser}`,
+                'Authorization': `Bearer ${currentUser}`,
                 'Content-Type': 'application/json'
             }
         })
@@ -42,7 +49,7 @@ export default function MyGroup({currentUser,getGroups}){
         .catch(err => console.log(err));
         console.log("call two")
 
-    },[renderGroups])
+    },[renderGroups,currUser,currentUser])
 
     // useEffect(() => {
     //     const interval = setInterval(() => {

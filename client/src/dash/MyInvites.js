@@ -21,13 +21,20 @@ export default function MyInvites({currentUser,reRenderGroups}){
     },[])
 
     useEffect(()=>{
+        console.log("user from invites")
+        setCurrUser(currUser)
+        console.log(currentUser)
+
+      },[currentUser,currUser])
+
+    useEffect(()=>{
         console.log("current User from groups")
-        console.log(currUser)
-        const url = `http://localhost:3500/users/getAllInvites?username=${currUser}`;
+        console.log(currentUser)
+        const url = `http://localhost:3500/users/getAllInvites?username=${currentUser}`;
         fetch(url, {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${currUser}`,
+                'Authorization': `Bearer ${currentUser}`,
                 'Content-Type': 'application/json'
             }
         })
@@ -40,7 +47,7 @@ export default function MyInvites({currentUser,reRenderGroups}){
         .catch(err => console.log(err));
         console.log("call two")
 
-    },[renderInvites])
+    },[renderInvites,currentUser,currUser])
 
     // useEffect(() => {
     //     const interval = setInterval(() => {

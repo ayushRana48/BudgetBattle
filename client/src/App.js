@@ -13,10 +13,18 @@ function App() {
   const[userGroups,setUserGroups] = useState([])
 
 
-  //fix this
   useEffect(()=>{
     const user = JSON.parse(localStorage.getItem('user'));
+    const groups = JSON.parse(localStorage.getItem('userGroups'));
+    if(groups){
+      console.log("yadslidlsa")
+      console.log(groups)
+      setUserGroups(groups)
+    }
+
+    console.log(user)
     if(user){
+      console.log("yaa")
       setCurrentUser(user)
     }
     console.log(currentUser)
@@ -33,9 +41,18 @@ function App() {
 
   function getGroups(x){
     console.log("frim app groups")
-    console.log(x)
-    setUserGroups(x)
+    if(x.length==0){
+      const groups = JSON.parse(localStorage.getItem('userGroups'));
+      console.log(groups)
+      setUserGroups(groups)
+
+    }
+    else{
+      localStorage.setItem('userGroups',x);
+      setUserGroups(x)
+    }
   }
+
 
   const groupRoutesList = userGroups.map(x=>{
     const groupPath = "/in/group/" + x.groupId

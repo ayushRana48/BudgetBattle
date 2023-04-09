@@ -9,6 +9,12 @@ import MyInvites from "./MyInvites";
 
 export default function In({currentUser,resetUser,getGroups}){
 
+
+  useEffect(()=>{
+    console.log("user from IN")
+    console.log(currentUser)
+  },[currentUser])
+
     return(
       <div className="">
         <Logout resetUser={resetUser}></Logout>
