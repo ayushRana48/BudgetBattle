@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 
-export default function Register(){
+export default function Register({getCurrentUser}){
     const [registerData,setRegisterData] = useState({user:"",password:""})
     const [approve,setApprove]=useState(false)
 
@@ -25,8 +25,12 @@ export default function Register(){
         .then(response => response.json())
         .then(data => {
             console.log(data)
-            navigate('/')})
-        .catch(err=>alert("Username already taken"))
+            getCurrentUser(registerData.user)
+            navigate('/in')})
+        .catch(err=>{
+            console.log(err)
+            alert("Username already taken")
+        })
     }
 
     return(

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import {Link} from "react-router-dom"
 import { useNavigate } from 'react-router-dom';
+import Register from "./Register";
 
 
 
@@ -33,6 +34,7 @@ export default function Login({getCurrentUser}){
     }
     
     return(
+    <div className="mt-24">
     <div className='login'>
         <h1 className="text-lg mb-8">Log In</h1>
         <div className="flex gap-x-16 justify-center">
@@ -41,9 +43,19 @@ export default function Login({getCurrentUser}){
         </div>
         
         <button className="mt-4 border rounded-md bg-purple px-4 py-1 text-white border-purple" onClick={logIn}>login</button>
-        <p>Don't Have an account <Link className="font-lg text-blue"to="/register">Sign Up</Link></p>
         
     </div>
+    <div class="flex items-center mt-4 justify-center mx-auto">
+      <div class="h-1 w-80 bg-hoverGray"></div>
+      <h1 class="mx-2 text-m">or</h1>
+      <div class="h-1 w-80 bg-hoverGray"></div>
+    </div>
+    <div className="mt-4">
+      <Register getCurrentUser={getCurrentUser}></Register>
+    </div>
+      
+    </div>
+
     )
 
 

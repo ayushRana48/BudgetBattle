@@ -24,6 +24,7 @@ function App() {
 
   function getCurrentUser(x){
     setCurrentUser(x)
+    console.log(currentUser)
   }
 
   function resetUser(){
@@ -50,7 +51,6 @@ function App() {
     <div className="App">
       <Routes>
             <Route path="/in" element={<In getGroups={getGroups} resetUser= {resetUser} currentUser={currentUser}/>}></Route>
-            <Route path="/register" element={<Register/>}></Route>
             <Route path="/" element={<Login getCurrentUser={getCurrentUser}/>}></Route> 
             <Route path="group/d5e7f0f11fd5170d1b66" element={<h1>dddd</h1>}></Route>
             {groupRoutesList}
