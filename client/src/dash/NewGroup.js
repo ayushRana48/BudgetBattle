@@ -19,7 +19,7 @@ export default function NewGroup({currentUser,reRender}){
             gpName=groupName
         }
         console.log("current User from in")
-        console.log(currUser)
+        console.log(currentUser)
         const url = `http://localhost:3500/group/new`;
         fetch(url, {
             method: 'POST',
@@ -27,7 +27,7 @@ export default function NewGroup({currentUser,reRender}){
                 'Content-Type': 'application/json'
             },
             body:JSON.stringify({
-                "user":currUser,
+                "user":currentUser,
                 "groupName":gpName
             }),
         })

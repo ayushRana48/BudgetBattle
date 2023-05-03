@@ -10,6 +10,8 @@ import Group from "./Group";
 export default function Invite({currentUser,groupName,groupId,inviter,reRenderInvites}){
     
     function acceptInvite(){
+        console.log("accept")
+
         const url = `http://localhost:3500/users/acceptInvites`;
         fetch(url, {
             method: 'PUT',
@@ -29,8 +31,11 @@ export default function Invite({currentUser,groupName,groupId,inviter,reRenderIn
         })
         .catch(err => console.log(err));
     }
+    console.log("user from IUnvite ")
+    console.log(currentUser)
 
     function declineInvite(){
+        console.log("decline")
         const url = `http://localhost:3500/users/declineInvite`;
         fetch(url, {
             method: 'PUT',

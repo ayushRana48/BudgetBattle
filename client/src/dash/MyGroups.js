@@ -23,7 +23,7 @@ export default function MyGroup({currentUser,getGroups}){
 
     useEffect(()=>{
         console.log("user from IN")
-        setCurrUser(currUser)
+        setCurrUser(currentUser)
         console.log(currentUser)
 
       },[currentUser,currUser])
@@ -61,7 +61,7 @@ export default function MyGroup({currentUser,getGroups}){
         setRenderGroups((x)=>!x)
     }
 
-    const groupsList = userGroups.map(x=><GroupClick currentUser={currUser} groupName={x.groupName} groupId={x.groupId}></GroupClick>)
+    const groupsList = userGroups.map(x=><GroupClick currentUser={currentUser} groupName={x.groupName} groupId={x.groupId}></GroupClick>)
 
     return(
 
@@ -69,7 +69,7 @@ export default function MyGroup({currentUser,getGroups}){
         <div className="">
             <h1 className="mb-8 text-lg"><span className="text-purple">{currentUser}'s</span> Groups</h1>
             {groupsList.length==0?<h1>no groups</h1>:groupsList}
-            <NewGroup currentUser={currUser} reRender={reRender}></NewGroup>  
+            <NewGroup currentUser={currentUser} reRender={reRender}></NewGroup>  
             <MyInvites className="" currentUser={currentUser} reRenderGroups={reRender}></MyInvites>
 
         </div>

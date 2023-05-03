@@ -143,7 +143,7 @@ const acceptInvites = async (req, res) => {
   ).exec();
 
   if (!foundUser) {
-    return res.status(404).json({ error: 'User not found' });
+    return res.status(404).json({ error: 'User found' });
   }
 
   const foundGroup = await Group.findOneAndUpdate(
@@ -180,7 +180,7 @@ const declineInvite = async (req,res)=>{
     ).exec();
   
     if (!foundUser) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: `User found ${user}` });
     }
   
     const foundGroup = await Group.findOneAndUpdate(
@@ -188,6 +188,8 @@ const declineInvite = async (req,res)=>{
       groupUpdate,
       options
     ).exec();
+
+    console.log("deleteGroupss")
 
     res.json({user:foundUser,group:foundGroup})
 }

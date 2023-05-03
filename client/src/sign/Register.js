@@ -26,6 +26,8 @@ export default function Register({getCurrentUser}){
         .then(data => {
             console.log(data)
             getCurrentUser(registerData.user)
+            localStorage.setItem('user', JSON.stringify(registerData.user));
+
             navigate('/in')})
         .catch(err=>{
             console.log(err)

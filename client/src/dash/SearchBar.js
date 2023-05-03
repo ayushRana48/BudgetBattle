@@ -5,7 +5,7 @@ export default function SearchBar({groupId,currentUser,reRender,groupName}) {
   
   const [query, setQuery] = useState();
   const [searchResults, setSearchResults] = useState([]);
-  const [more,setMore]= useState(true)
+  const [more,setMore]= useState(false)
 
 
   useEffect(() => {
@@ -14,7 +14,13 @@ export default function SearchBar({groupId,currentUser,reRender,groupName}) {
       .then(data => {
         console.log(data)
         const list = data.map(x=>x.username)
+        const index = list.indexOf(currentUser);
+        if(index !=-1){
+          list.splice(index, 1);
+    
+        }  
         setPeople(list)
+        setSearchResults(list)
       })
       .catch(err => console.log(err));
     console.log("call two")
@@ -36,7 +42,11 @@ export default function SearchBar({groupId,currentUser,reRender,groupName}) {
     );
     // 
     // 
+    if(newQuery.length==0){
+      results=people
+    }
     setSearchResults(results);
+
     console.log(results)
 
   }

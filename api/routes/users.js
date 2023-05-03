@@ -13,7 +13,7 @@ router.get('/getGroups',userController.getUserGroups)
 router.put('/sendInvite',userController.sendInvite)
 router.get('/getAllInvites',userController.getAllInvites)
 router.put('/acceptInvites',userController.acceptInvites)
-router.put('/declineInvite',userController.acceptInvites)
+router.put('/declineInvite',userController.declineInvite)
 
 
 

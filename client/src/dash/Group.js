@@ -93,6 +93,8 @@ export default function Group({currentUser,groupName,groupId}){
     function reRender(){
         setRenderMembers((x)=>!x)
     }
+
+    
     const memberCompList=members.map(x=><Member username={x}></Member>)
     const inviteMemberCompList=invites.map(x=><InviteMember username={x}></InviteMember>)
 

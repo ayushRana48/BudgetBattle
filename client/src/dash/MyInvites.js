@@ -61,7 +61,7 @@ export default function MyInvites({currentUser,reRenderGroups}){
     }
     
 
-    const inviteList = userInvites.map(x=><Invite currentUser={currUser} groupName={x.groupName} groupId={x.groupId} inviter={x.inviter} reRenderInvites={reRenderInvites}></Invite>)
+    const inviteList = userInvites.map(x=><Invite currentUser={currentUser} groupName={x.groupName} groupId={x.groupId} inviter={x.inviter} reRenderInvites={reRenderInvites}></Invite>)
 
     return(
         <div>

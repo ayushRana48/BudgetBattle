@@ -5,6 +5,7 @@ import Register from './sign/Register';
 import Login from './sign/Login';
 import In from './dash/In';
 import Group from './dash/Group';
+import io from "socket.io-client";
 
 
 function App() {
@@ -54,7 +55,7 @@ function App() {
   }
 
 
-  const groupRoutesList = userGroups.map(x=>{
+  const groupRoutesList = !userGroups?null:userGroups.map(x=>{
     const groupPath = "/in/group/" + x.groupId
     return(
       <Route path={groupPath} element={<Group currentUser={currentUser} groupName={x.groupName} groupId={x.groupId}/>}> </Route> 
