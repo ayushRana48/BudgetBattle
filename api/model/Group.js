@@ -20,6 +20,13 @@ const groupSchema = new Schema({
     guests: [{
         type: String
     }],
+    startDate:{
+        type:Date
+    },
+    endDate:{
+        type:Date
+    },
+
 });
 
 module.exports = mongoose.model('Group', groupSchema);

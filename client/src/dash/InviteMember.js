@@ -17,7 +17,7 @@ export default function InviteMember({currentUser,username}){
                 <h1 className="text-sm mt-2 truncate">{username}</h1>
             </div>
             </div>
-            <div className="h-[3px] mx-auto w-[40%] bg-hoverGray" ></div>
+            <div className="h-[1px] mx-auto w-[40%] bg-hoverGray" ></div>
         </div>
 
 

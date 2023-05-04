@@ -4,6 +4,7 @@ const url=require('url')
 const querystring=require('querystring')
 
 const crypto = require('crypto');
+const { getSystemErrorMap } = require('util');
 
 
 const handleNewGroup = async (req, res) => {
@@ -149,6 +150,47 @@ const leaveDeleteGroup = async (req,res)=>{
 }
 
 
+const setStartDate = async (req,res) =>{
+  const {groupId,startDate} = req.body;
+  const group = await Group.findOne({groupId:groupId}).exec();
+  if (!group) return res.status(401).json("Group not found"); 
+
+  const updatedGroup = await Group.findOneAndUpdate({"groupId":groupId}, {"startDate":startDate}, {new: true});
+  res.json({
+    group: updatedGroup,
+  });
+}
+
+const setEndDate = async (req,res) =>{
+  const {groupId,endDate} = req.body;
+  const group = await Group.findOne({groupId:groupId}).exec();
+  if (!group) return res.status(401).json("Group not found"); 
+
+  const updatedGroup = await Group.findOneAndUpdate({"groupId":groupId}, {"endDate":endDate}, {new: true});
+  res.json({
+    group: updatedGroup,
+  });
+}
+
+const getStartDate = async (req,res)=>{
+  const parsedUrl=url.parse(req.url)
+  const parsedQuery=querystring.parse(parsedUrl.query)
+
+  const groupId=parsedQuery.groupId
+  const group=await Group.findOne({groupId:groupId}).exec();
+  res.json({startDate:group.startDate})
+}
+
+const getEndDate = async (req,res)=>{
+  const parsedUrl=url.parse(req.url)
+  const parsedQuery=querystring.parse(parsedUrl.query)
+
+  const groupId=parsedQuery.groupId
+  const group=await Group.findOne({groupId:groupId}).exec();
+  res.json({endDate:group.endDate})
+}
+
+
 module.exports = { handleNewGroup,addMember, getAll,
   getAllMembers,getAllInvites,leaveGroup,
-  leaveDeleteGroup };
+  leaveDeleteGroup,setStartDate,setEndDate,getStartDate,getEndDate};
