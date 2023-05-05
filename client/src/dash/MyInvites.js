@@ -1,9 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import axios from "axios";
-import Transactions from "./Transactions";
-import NewGroup from "./NewGroup"
-import GroupClick from "./GroupClick";
 import Invite from "./Invite"
 
 export default function MyInvites({currentUser,reRenderGroups}){

@@ -1,10 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import axios from "axios";
-import Transactions from "./Transactions";
-import NewGroup from "./NewGroup"
-import { Route, Routes, Outlet } from 'react-router-dom'; // Import the Outlet component
-import Group from "./Group";
+
 
 
 export default function GroupClick({currentUser,groupName,groupId}){

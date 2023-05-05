@@ -4,8 +4,7 @@ import { Route,Routes } from 'react-router-dom'
 import Register from './sign/Register';
 import Login from './sign/Login';
 import In from './dash/In';
-import Group from './dash/Group';
-import io from "socket.io-client";
+import Group from './Group/Group';
 
 
 function App() {

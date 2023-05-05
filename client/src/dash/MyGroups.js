@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import Transactions from "./Transactions";
 import NewGroup from "./NewGroup"
-import GroupClick from "./GroupClick";
+import GroupClick from "../Group/GroupClick";
 import MyInvites from "./MyInvites";
 
 
