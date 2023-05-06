@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import axios from "axios";
-import Transactions from "./Transactions";
 import NewGroup from "./NewGroup"
 import GroupClick from "../Group/GroupClick";
 import MyInvites from "./MyInvites";
@@ -69,7 +67,7 @@ export default function MyGroup({currentUser,getGroups}){
         <div className="">
             <h1 className="mb-8 text-lg"><span className="text-purple">{currentUser}'s</span> Groups</h1>
             {groupsList.length==0?<h1>no groups</h1>:groupsList}
-            <NewGroup currentUser={currentUser} reRender={reRender}></NewGroup>  
+            <NewGroup currentUser={currentUser} reRender={reRender} userGroups={userGroups}></NewGroup>  
             <MyInvites className="" currentUser={currentUser} reRenderGroups={reRender}></MyInvites>
 
         </div>

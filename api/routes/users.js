@@ -6,7 +6,10 @@ const userController = require('../controllers/usersController');
 router.get('/getAll', userController.getAllUsers);
 router.get('/getUserInfo', userController.getUserInfo);
 
-router.put('/updateUserBankInfo',userController.updateBankInfo)
+router.put('/addBank',userController.addBank)
+router.put('/deleteBank',userController.deleteBank)
+router.get('/getBanks',userController.getUserBanks)
+
 
 router.get('/getGroups',userController.getUserGroups)
 

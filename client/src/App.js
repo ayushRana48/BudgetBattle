@@ -5,6 +5,7 @@ import Register from './sign/Register';
 import Login from './sign/Login';
 import In from './dash/In';
 import Group from './Group/Group';
+import Setting from './Setting/Setting';
 
 
 function App() {
@@ -69,7 +70,8 @@ function App() {
       <Routes>
             <Route path="/in" element={<In getGroups={getGroups} resetUser= {resetUser} currentUser={currentUser}/>}></Route>
             <Route path="/" element={<Login getCurrentUser={getCurrentUser}/>}></Route> 
-            <Route path="group/d5e7f0f11fd5170d1b66" element={<h1>dddd</h1>}></Route>
+            <Route path="/in/settings" element={<Setting currentUser={currentUser} resetUser={resetUser}/>}></Route> 
+
             {groupRoutesList}
       </Routes>
     </div>

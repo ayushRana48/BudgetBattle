@@ -11,7 +11,7 @@ export default function Group({currentUser,groupName,groupId}){
     
 
     useEffect(()=>{
-        let set= JSON.parse(localStorage.getItem('setting'));
+        let set= JSON.parse(localStorage.getItem('settingGroup'));
         if(set){
             setSetting(set)
         }
@@ -19,13 +19,13 @@ export default function Group({currentUser,groupName,groupId}){
 
     function settingTrue(){
         setSetting(true)
-        localStorage.setItem('setting', JSON.stringify(true));
+        localStorage.setItem('settingGroup', JSON.stringify(true));
 
     }
 
     function settingFalse(){
         setSetting(false)
-        localStorage.setItem('setting', JSON.stringify(false));
+        localStorage.setItem('settingGroup', JSON.stringify(false));
 
     }
 

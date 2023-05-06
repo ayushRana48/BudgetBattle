@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
-import Transactions from "../dash/Transactions";
+import Transactions from "../Setting/Transactions";
 import NewGroup from "../dash/NewGroup"
 import { Route, Routes, Outlet } from 'react-router-dom'; // Import the Outlet component
 import Group from "./Group";

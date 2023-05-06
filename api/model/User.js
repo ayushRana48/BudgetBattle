@@ -10,8 +10,28 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    accessToken:String,
-    bankName:String,
+    banks:[{
+        accessToken:{
+            type:String,
+            required: true,
+        },
+        bankName:{
+            type:String,
+            required: true,
+        },
+        bankBrand:{
+            type:String,
+            required:true,
+        },
+        accountNum:{
+            type:String,
+            required: true,
+        },
+        account_id:{
+            type:String,
+            required:true,
+        },
+    }],
     groups: [{
         groupName:{
             type:String,

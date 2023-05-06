@@ -1,15 +1,20 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import axios from "axios";
-import Transactions from "./Transactions";
 
-export default function NewGroup({currentUser,reRender}){
+
+export default function NewGroup({currentUser,reRender,userGroups}){
     const [groupName,setGroupName]= useState("")
     const [currUser,setCurrUser]= useState(currentUser)
     const [more,setMore]= useState(false)
 
    
     function createGroup(){
+        // for(let i=0;i<userGroups.length;i++){
+        //     if(userGroups[i].groupName===groupName){
+        //         alert("Group Name Already Taken")
+        //     }
+        // }
+
         let gpName;
         if(groupName==""){
             const randInt = Math.floor(Math.random() * 100000)

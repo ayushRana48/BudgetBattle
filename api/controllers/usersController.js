@@ -16,11 +16,40 @@ const getAllUsers = (req, res) => {
   });
 }
 
-const updateBankInfo = async (req, res) => {
+const addBank = async (req, res) => {
+
   try {
+
+    const foundUser = await User.findOne({username:req.body.user}).exec();
+    console.log("lsdkjglkdsjgf;solfjalsdk;fjc;laksdjfhc;klasd")
+    console.log(foundUser)
+    for(let i=0;i<foundUser.banks.length;i++){
+      console.log(foundUser.banks[i].account_id)
+      console.log(req.body.account_id)
+      if(foundUser.banks[i].account_id === req.body.account_id){
+        return;
+      }
+    }
+
     const updatedUser = await User.findOneAndUpdate(
       { username: req.body.user },
-      { "accessToken": req.body.accessToken, "bankName": req.body.bankName },
+      { $push: { banks: { "accessToken":req.body.accessToken,"bankName": req.body.bankName,"accountNum": req.body.accountNum ,"bankBrand": req.body.bankBrand,"account_id":req.body.account_id} } },
+      { new: true }
+    );
+
+    res.json(updatedUser);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error updating user' });
+  }
+};
+
+
+const deleteBank = async (req, res) => {
+  try {    
+    const updatedUser = await User.findOneAndUpdate(
+      { username: req.body.user },
+      { $pull: { banks: { "accessToken":req.body.accessToken} } },
       { new: true }
     );
     res.json(updatedUser);
@@ -29,6 +58,28 @@ const updateBankInfo = async (req, res) => {
     res.status(500).json({ message: 'Error updating user' });
   }
 };
+
+const getUserBanks=async(req,res)=>{
+  const parsedUrl=url.parse(req.url)
+  const parsedQuery=querystring.parse(parsedUrl.query)
+
+  const user=parsedQuery.username
+  const foundUser = await User.findOne({username:user}).exec();
+  if (!foundUser) return res.sendStatus(401); //Unauthorized 
+  let list=[]
+
+  let listlen=Math.max(foundUser.banks.length,4)
+
+  
+  for(let i=0;i<listlen;i++){
+      list.push(foundUser.banks[i])
+    
+  }
+  console.log(list)
+
+  res.json(list)
+}
+
 
 const getUserInfo=async(req,res)=>{
   const parsedUrl=url.parse(req.url)
@@ -196,6 +247,6 @@ const declineInvite = async (req,res)=>{
 
 
 
-module.exports = { getAllUsers,updateBankInfo,getUserInfo,
+module.exports = { getAllUsers,addBank,deleteBank,getUserBanks,getUserInfo,
   getUserGroups,sendInvite,getAllInvites,acceptInvites,
   declineInvite};

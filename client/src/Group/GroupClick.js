@@ -16,6 +16,7 @@ export default function GroupClick({currentUser,groupName,groupId}){
             <div className="flex  mb-2">
                 <img className="mr-4" src="/GroupIcon.svg"></img>
                 <h1 className="text-sm mt-2 truncate">{groupName}</h1>
+                <h1 className="mt-2 ml-4 text-[#575757]">#{groupId.toString().slice(-4)}</h1>
             </div>
             </div>
             <div className="h-[3px] mx-auto w-[40%] bg-hoverGray" ></div>
