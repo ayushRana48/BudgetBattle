@@ -23,7 +23,7 @@ const handleNewGroup = async (req, res) => {
             }
         }
         //store the new user
-        const newGroup = await Group.create({ "groupId":groupId, "host": user, "groupName": groupName, "guests":[]});
+        const newGroup = await Group.create({ "groupId":groupId, "host": {name:user}, "groupName": groupName, "guests":[]});
         const updatedUser = await User.findOneAndUpdate(
             { username: user },
             { $push: { groups: { "groupId": groupId, "groupName":groupName } } },
@@ -43,9 +43,9 @@ const addMember = async (req,res) =>{
     const foundUser = await User.findOne({username:user}).exec();
     if (!foundUser) return res.status(401).json("User not found"); 
     const group = await Group.findOne({groupId:groupId}).exec();
-    if(group.host==user || group.guests.includes(user)) return res.status(409).json("User already in group"); 
+    if(group.host.name==user || group.guests.includes(user)) return res.status(409).json("User already in group"); 
 
-    const updatedGroup = await Group.findOneAndUpdate({"groupId":groupId}, { $push: { guests: user }}, {new: true});
+    const updatedGroup = await Group.findOneAndUpdate({"groupId":groupId}, { $push: { guests: {name:user} }}, {new: true});
     const updatedUser = await User.findOneAndUpdate(
         { username: user },
         { $push: { groups: { groupId: groupId, groupName: group.groupName } } },
@@ -74,7 +74,15 @@ const getAllMembers = async (req,res)=>{
 
   const groupId=parsedQuery.groupId
   const group=await Group.findOne({groupId:groupId}).exec();
-  res.json({host:group.host,guests:group.guests})
+  let list =[]
+  console.log(group.guests)
+  for(let i=0;i<group.guests.length;i++){
+    
+    list.push(group.guests[i].name)
+  }
+  console.log(list)
+
+  res.json({host:group.host.name,guests:list})
 }
 
 const getAllInvites = async (req,res)=>{
@@ -94,9 +102,9 @@ const leaveGroup = async (req,res) =>{
   const foundGroup = await Group.findOne({groupId:groupId}).exec();
   let groupUpdate;
 
-  if((foundGroup && !foundGroup.guests.includes(user)) && (foundGroup && foundGroup.host!=user))return res.status(401).json("User not in group"); 
+  if((foundGroup && !foundGroup.guests.find(guest => guest.name === user)) && (foundGroup && foundGroup.host.name!=user))return res.status(401).json("User not in group"); 
 
-  if(foundGroup && foundGroup.host==user){
+  if(foundGroup && foundGroup.host.name==user){
     if(foundGroup && foundGroup.guests.length==0) return res.status(401).json("Can't leave group as last member"); 
     groupUpdate = {
       host:foundGroup.guests[0],
@@ -104,7 +112,7 @@ const leaveGroup = async (req,res) =>{
     };
   }
   else{
-    groupUpdate={ $pull: { guests: user }}
+    groupUpdate={ $pull: { guests: {name:user} }}
   }
     const updatedGroup = await Group.findOneAndUpdate({"groupId":groupId}, groupUpdate, {new: true});
     const updatedUser = await User.findOneAndUpdate(
@@ -125,8 +133,8 @@ const leaveDeleteGroup = async (req,res)=>{
   if (!foundUser) return res.status(401).json("User not found"); 
   const foundGroup = await Group.findOne({groupId:groupId}).exec();
 
-  if((foundGroup && !foundGroup.guests.includes(user)) && (foundGroup && foundGroup.host!=user))return res.status(401).json("User not in group"); 
-  if(foundGroup && (foundGroup.host!=foundUser && foundGroup.guests.length!=0)) return res.status(401).json("Can't delete group"); 
+  if((foundGroup && !foundGroup.guests.find(guest => guest.name === user)) && (foundGroup && foundGroup.host.name!=user))return res.status(401).json("User not in group"); 
+  if(foundGroup && (foundGroup.host.name!=foundUser.username && foundGroup.guests.length!=0)) return res.status(401).json("Can't delete group"); 
 
   Group.deleteOne(foundGroup)
   .then(() => {

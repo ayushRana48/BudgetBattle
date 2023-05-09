@@ -7,8 +7,13 @@ const groupSchema = new Schema({
         required:true
     },
     host: {
-        type: String,
-        required: true
+        name:{
+            type:String,
+            required: true,
+        },
+        bankName:{
+            type:String,
+        }
     },
     groupName:{
         type:String,
@@ -18,7 +23,14 @@ const groupSchema = new Schema({
         type: String
     }],
     guests: [{
-        type: String
+        name:{
+            type:String,
+            required: true,
+        },
+        bankName:{
+            type:String,
+            
+        },
     }],
     startDate:{
         type:Date

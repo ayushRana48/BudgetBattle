@@ -68,13 +68,27 @@ const getUserBanks=async(req,res)=>{
   if (!foundUser) return res.sendStatus(401); //Unauthorized 
   let list=[]
 
-  let listlen=Math.max(foundUser.banks.length,4)
 
-  
-  for(let i=0;i<listlen;i++){
-      list.push(foundUser.banks[i])
-    
+  //if not empty
+  if(foundUser.banks.length>=1){
+    list.push(foundUser.banks[0])
+    for(let i=1;i<foundUser.banks.length;i++){
+      //get rid of duplicate
+      if(foundUser.banks[i].account_id===foundUser.banks[i-1].account_id){
+        //do nothing
+      }
+      else{
+        list.push(foundUser.banks[i])
+      }    
+    }
   }
+
+  const updatedUser = await User.findOneAndUpdate(
+    { username: user },
+    { banks: list},
+    { new: true }
+  );
+
   console.log(list)
 
   res.json(list)
@@ -182,7 +196,7 @@ const acceptInvites = async (req, res) => {
 
   const groupUpdate = {
     $pull: { sentInvites:user },
-    $push: { guests: user }
+    $push: { guests: {name:user} }
   };
 
   const options = { new: true };

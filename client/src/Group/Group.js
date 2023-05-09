@@ -62,7 +62,7 @@ export default function Group({currentUser,groupName,groupId}){
             <button onClick={settingTrue} className="absolute top-4 right-8 hover:bg-darkPurple hover:rounded-md rounded-md w-12 h-8 bg-purple text-white mt-2 ml-2">
                 <img className="w-6 ml-[0.75rem] mb-[0.25rem]" src="/Setting.svg"/>
             </button>
-            <button onClick={()=>navigate('/in')}className="absolute top-4 left-8 py-1 hover:bg-darkPurple rounded-md bg-purple px-6 text-white mt-2 ml-2">
+            <button onClick={()=>navigate('/in')} className="absolute top-4 left-8 py-1 hover:bg-darkPurple rounded-md bg-purple px-6 text-white mt-2 ml-2">
                 <img src="/goBack.svg" className="w-10" alt="Go Back" />
             </button>
             <h1>members</h1>
