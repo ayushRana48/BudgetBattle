@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 
 
-export default function Card({groupId,entireUser,currentUser,host}){
+export default function Card({groupId,entireUser,currentUser,host,connectBank,reRender,getConnect}){
     
     const [rem,setRem]=useState(40)
 
@@ -14,7 +14,8 @@ export default function Card({groupId,entireUser,currentUser,host}){
 
     const[currentBank,setCurrentBank]=useState(entireUser.bankName)
 
-    const[saveBank,setSaveBank]=useState()
+    const[show,setShow]= useState(connectBank)
+
 
 
 
@@ -26,19 +27,11 @@ export default function Card({groupId,entireUser,currentUser,host}){
         }
     });
 
-    console.log(host)
-    console.log(currentUser)
-    
 
-    useEffect(()=>{
-        console.log(currentBank)
-    },[currentBank])
 
     const optionList=options.map(x=><option className="w-8" value={x}>{x}</option>)
     
     useEffect(()=>{
-        console.log("current user banks from card")
-        console.log(currentUser)
         const url = `http://localhost:3500/users/getBanks?username=${currentUser}`;
         fetch(url, {
             method: 'GET',
@@ -59,13 +52,19 @@ export default function Card({groupId,entireUser,currentUser,host}){
 
     function saveBankk(){
         console.log(currentBank)
+
         if(currentBank==="Select..."){
-            setSaveBank()
-           
+            console.log("yait work")
+            setShow(false)
+            getConnect(false)
         }
         else{
-            setSaveBank(currentBank)
+            console.log("nooppork")
+            setShow(true)
+            getConnect(true)
+
         }
+
         const url1="http://localhost:3500/group/updateBankInfo"
         fetch(url1, {
             method: 'PUT',
@@ -82,13 +81,16 @@ export default function Card({groupId,entireUser,currentUser,host}){
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data)
+            
+
         })
         .catch(err => console.log(err));
         setIsEdit(false)
+
     }
 
-    console.log(saveBank)
+
+    console.log(`BANKCONNNEXT ${connectBank} sssss ${show}`)
 
 
     return(
@@ -96,42 +98,47 @@ export default function Card({groupId,entireUser,currentUser,host}){
             <img className="w-[80%] ml-[10%]" src="/MemberIcon.svg"></img>
             <h1 className="w-[80%] ml-[10%] text-ellipsis overflow-hidden font-semibold text-m">{entireUser.name}</h1>
             {isCurrent?
-                isEdit || !saveBank?
+                isEdit || !connectBank?
                     <div className="flex mt-2">
-                        <select value={currentBank} className="w-24 mr-2 mb-4 h-6 border border-black rounded-md" onChange={e=>setCurrentBank((x)=>(e.target.value))}>
+                        <select value={currentBank} className="w-24 mr-2 mb-6 h-6 border border-black rounded-md" onChange={e=>setCurrentBank((x)=>(e.target.value))}>
                             <option value="Select...">{"Select..."}</option>
                             {optionList}
                         </select>
                         <button onClick={saveBankk}  className="h-6 px-1 text-xs text-white bg-purple hover:bg-darkPurple hover:cursor-pointer rounded-md">save</button>
+
+
+
                     </div>
                     :
                     <div>
                         <div className="flex mt-2">
-                            <h1 className="mb-4 w-28 mr-2 text-ellipsis overflow-hidden h-6">{saveBank}</h1>
+                            <h1 className="mb-6 w-28 mr-2 text-ellipsis overflow-hidden h-6">{currentBank}</h1>
                             <button onClick={()=>setIsEdit(true)} className="w-6 h-6 px-1 bg-purple hover:bg-darkPurple hover:cursor-pointer rounded-md">
                                 <img className="w-4"src='/Edit.svg'></img>
                             </button>                    
                         </div>
-                        <div className="bg-[#b0acac] w-100% h-6 p-[0.2rem] rounded-md">
-                            <div className="h-[100%] w-[100%]  bg-purple rounded-md justify-start">
-                                <p className="text-white mr-[70%] text-xs">100%</p>
-                            </div>
-                         </div>  
+       
                     </div>
 
             :
-            saveBank?
-            <h1>save Bank {saveBank} d</h1>
-            :
-            <h1>{saveBank}no Save</h1>
+                connectBank?
+                <h1 className="mb-6 w-28  ml-6 mt-2 text-ellipsis overflow-hidden h-6">{entireUser.bankName}</h1>
+                :
+                <h1 className="mb-6 w-28  ml-6 mt-2 text-ellipsis overflow-hidden h-6"></h1>
+
+
             }
 
             
-            {saveBank ?
-    null
+            {connectBank && entireUser.bankName ?
+            <div className="bg-[#b0acac] w-100%  h-6 p-[0.2rem] rounded-md mb-6">
+                <div className="h-[100%] w-[100%]  bg-purple rounded-md justify-start">
+                    <p className="text-white mr-[70%] text-xs">100%</p>
+                </div>
+            </div>  
             :
-                isCurrent?
-                    <div className="w-100% h-2 p-[0.2rem] rounded-md mb-6">
+                !connectBank || isCurrent?
+                    <div className="w-100% h-6 p-[0.2rem] rounded-md mb-6">
                         <h1 className="text-[15px]">Select Bank Account</h1>
                     </div>
                     :

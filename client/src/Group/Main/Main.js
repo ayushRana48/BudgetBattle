@@ -8,6 +8,23 @@ export default function Main({settingTrue,host,members,groupId,currentUser,group
 
     const [allPeople,setAllPeople]=useState([])
 
+    const [connectBank,setConnectBank]=useState(false)
+
+    const [render,setRender]=useState(false)
+
+    function reRender(){
+        console.log("rerendddderrr")
+        setRender((x)=>!x)
+    }
+
+    function getConnect(x){
+        console.log(`BANKCONNNEXT ${x}`)
+        console.log(x)
+        setConnectBank(x)
+    }
+
+
+
     useEffect(()=>{
         console.log(host)
         console.log(members)
@@ -21,11 +38,19 @@ export default function Main({settingTrue,host,members,groupId,currentUser,group
         console.log(list)
         setAllPeople(list)
 
+        for(let i = 0; i < list.length; i++) {
+            if(list[i].name===currentUser){
+                if(list[i].bankName){
+                    setConnectBank(true)
+                }
+            }
+        }
+
     
 
-    },[])
+    },[render])
 
-    const CardList=allPeople.map(x=><Card host={host} groupId={groupId} currentUser={currentUser} entireUser={x}></Card>)
+    const CardList=allPeople.map(x=><Card host={host} groupId={groupId} currentUser={currentUser} entireUser={x} connectBank={connectBank} reRender={reRender} getConnect={getConnect}></Card>)
 
     return(
         <div>  
