@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import GroupSetting from "./GroupSetting";
+import Main from "./Main/Main";
 
 export default function Group({currentUser,groupName,groupId}){
     const navigate=useNavigate()
     const [members,setMembers]=useState([])
     const [host,setHost]=useState([])
     const [setting,setSetting]=useState(false)
+    const [loading,setLoading]=useState(true)
 
     
 
@@ -31,7 +33,7 @@ export default function Group({currentUser,groupName,groupId}){
 
 
     useEffect(()=>{
-        const url = `http://localhost:3500/group/getAllMembers?groupId=${groupId}`;
+        const url = `http://localhost:3500/group/getAllMembersWithBank?groupId=${groupId}`;
         fetch(url, {
             method: 'GET',
             headers: {
@@ -44,10 +46,15 @@ export default function Group({currentUser,groupName,groupId}){
             console.log(data)
             setHost(data.host)
             setMembers(data.guests)
+            setLoading(false)
         })
         .catch(err => console.log(err));
         console.log("call four")
     },[])
+
+    console.log(host)
+    console.log(members)
+
 
     return(
         setting?
@@ -59,13 +66,10 @@ export default function Group({currentUser,groupName,groupId}){
         </div>
         :
         <div>
-            <button onClick={settingTrue} className="absolute top-4 right-8 hover:bg-darkPurple hover:rounded-md rounded-md w-12 h-8 bg-purple text-white mt-2 ml-2">
-                <img className="w-6 ml-[0.75rem] mb-[0.25rem]" src="/Setting.svg"/>
-            </button>
-            <button onClick={()=>navigate('/in')} className="absolute top-4 left-8 py-1 hover:bg-darkPurple rounded-md bg-purple px-6 text-white mt-2 ml-2">
-                <img src="/goBack.svg" className="w-10" alt="Go Back" />
-            </button>
-            <h1>members</h1>
+            {!loading?
+                <Main settingTrue={settingTrue} groupName={groupName} host={host} members={members} groupId={groupId} currentUser={currentUser}></Main>
+                :
+                <h1>loading</h1>}
         </div>
         
     )

@@ -85,6 +85,18 @@ const getAllMembers = async (req,res)=>{
   res.json({host:group.host.name,guests:list})
 }
 
+//kinda redundant to first but o well
+const getAllMembersWithBank = async (req,res)=>{
+  const parsedUrl=url.parse(req.url)
+  const parsedQuery=querystring.parse(parsedUrl.query)
+
+  const groupId=parsedQuery.groupId
+  const group=await Group.findOne({groupId:groupId}).exec();
+
+  res.json({host:group.host,guests:group.guests})
+}
+
+
 const getAllInvites = async (req,res)=>{
   const parsedUrl=url.parse(req.url)
   const parsedQuery=querystring.parse(parsedUrl.query)
@@ -198,7 +210,32 @@ const getEndDate = async (req,res)=>{
   res.json({endDate:group.endDate})
 }
 
+const updateBankInfo = async (req,res)=>{
+  let {groupId,host,user,bankName}=req.body
+  const group=await Group.findOne({groupId:groupId}).exec();
+  if(bankName==="Select..."){
+    bankName=""
+  }
+  if(host===user){
+    console.log("heeere")
+    let temp = {"name":host,"bankName":bankName}
+    const updatedGroup = await Group.findOneAndUpdate({"groupId":groupId}, {"host":temp}, {new: true});
+  }
+  else{
+    let list=[]
+    for(let i=0;i<group.guests.length;i++){
+      if(group.guests[i].name===user){
+        list.push({"name":user,"bankName":bankName})
+      }
+      else{
+        list.push(group.guests[i])
+      }
+    }
+    const updatedGroup = await Group.findOneAndUpdate({"groupId":groupId}, {"guests":list}, {new: true});
+  }
+}
+
 
 module.exports = { handleNewGroup,addMember, getAll,
   getAllMembers,getAllInvites,leaveGroup,
-  leaveDeleteGroup,setStartDate,setEndDate,getStartDate,getEndDate};
+  leaveDeleteGroup,setStartDate,setEndDate,getStartDate,getEndDate,getAllMembersWithBank,updateBankInfo};

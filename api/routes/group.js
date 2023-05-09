@@ -13,6 +13,8 @@ router.put('/setStartDate', groupController.setStartDate);
 router.put('/setEndDate', groupController.setEndDate);
 router.get('/getStartDate', groupController.getStartDate);
 router.get('/getEndDate', groupController.getEndDate);
+router.get('/getAllMembersWithBank', groupController.getAllMembersWithBank);
+router.put('/updateBankInfo', groupController.updateBankInfo);
 
 
 
