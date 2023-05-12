@@ -45,7 +45,7 @@ const addMember = async (req,res) =>{
     const group = await Group.findOne({groupId:groupId}).exec();
     if(group.host.name==user || group.guests.includes(user)) return res.status(409).json("User already in group"); 
 
-    const updatedGroup = await Group.findOneAndUpdate({"groupId":groupId}, { $push: { guests: {name:user} }}, {new: true});
+    const updatedGroup = await Group.findOneAndUpdate({"groupId":groupId}, { $push: { guests: {name:user,"percentLeft":100,"budget":500} }}, {new: true});
     const updatedUser = await User.findOneAndUpdate(
         { username: user },
         { $push: { groups: { groupId: groupId, groupName: group.groupName } } },
@@ -218,14 +218,15 @@ const updateBankInfo = async (req,res)=>{
   }
   if(host===user){
     console.log("heeere")
-    let temp = {"name":host,"bankName":bankName}
+    let temp = {name:group.host.name,"budget":group.host.budget,"bankName":bankName,"percentLeft":group.host.percentLeft}
     const updatedGroup = await Group.findOneAndUpdate({"groupId":groupId}, {"host":temp}, {new: true});
   }
   else{
     let list=[]
     for(let i=0;i<group.guests.length;i++){
       if(group.guests[i].name===user){
-        list.push({"name":user,"bankName":bankName})
+        let temp = {name:group.guests[i].name,"budget":group.guests[i].budget,"bankName":bankName,"percentLeft":group.guests[i].percentLeft}
+        list.push(temp)
       }
       else{
         list.push(group.guests[i])
@@ -235,7 +236,103 @@ const updateBankInfo = async (req,res)=>{
   }
 }
 
+const setBudget = async (req,res)=>{
+  console.log("yayayayayayay")
+  let {groupId,host,user,budget}=req.body
+  const group=await Group.findOne({groupId:groupId}).exec();
+  if(host===user){
+    console.log("heeere")
+    let temp = {name:group.host.name,"budget":budget,"bankName":group.host.bankName,"percentLeft":group.host.percentLeft}
+    const updatedGroup = await Group.findOneAndUpdate({"groupId":groupId}, {"host":temp}, {new: true});
+  }
+  else{
+    let list=[]
+    for(let i=0;i<group.guests.length;i++){
+      if(group.guests[i].name===user){
+        let temp = {name:group.guests[i].name,"budget":budget,"bankName":group.guests[i].bankName,"percentLeft":group.guests[i].percentLeft}
+        console.log(temp)
+        list.push(temp)
+      }
+      else{
+        list.push(group.guests[i])
+      }
+    }
+    // console.log(list)
+    const updatedGroup = await Group.findOneAndUpdate({"groupId":groupId}, {"guests":list}, {new: true});
+  }
+}
+
+
+const getBudget = async (req,res)=>{
+  const parsedUrl=url.parse(req.url)
+  const parsedQuery=querystring.parse(parsedUrl.query)
+
+  const groupId=parsedQuery.groupId
+  const user=parsedQuery.user
+  const host=parsedQuery.host
+
+
+  const group=await Group.findOne({groupId:groupId}).exec();
+  if(host===user){
+    res.json(group.host.budget)
+  }
+  else{
+    for(let i=0;i<group.guests.length;i++){
+      if(group.guests[i].name===user){
+        res.json(group.guests[i].budget)
+        return
+      }
+    }
+  }
+}
+
+const getBankName = async (req,res)=>{
+  const parsedUrl=url.parse(req.url)
+  const parsedQuery=querystring.parse(parsedUrl.query)
+
+  const groupId=parsedQuery.groupId
+  const user=parsedQuery.user
+  const host=parsedQuery.host
+
+
+  const group=await Group.findOne({groupId:groupId}).exec();
+  if(host===user){
+    res.json(group.host.bankName)
+  }
+  else{
+    for(let i=0;i<group.guests.length;i++){
+      if(group.guests[i].name===user){
+        res.json(group.guests[i].bankName)
+        return
+      }
+    }
+  }
+}
+
+const updatePercentLeft = async (req,res)=>{
+  let {groupId,host,user,percent}=req.body
+  const group=await Group.findOne({groupId:groupId}).exec();
+  if(host===user){
+    let temp = {name:group.host.name,"budget":budget,"bankName":group.host.bankName,"percentLeft":percentLeft}
+    const updatedGroup = await Group.findOneAndUpdate({"groupId":groupId}, {"host":temp}, {new: true});
+  }
+  else{
+    let list=[]
+    for(let i=0;i<group.guests.length;i++){
+      if(group.guests[i].name===user){
+        let temp = {name:group.guests[i].name,"budget":group.guests[i].budget,"bankName":group.guests[i].bankName,"percentLeft":percentLeft}
+        console.log(temp)
+        list.push(temp)
+      }
+      else{
+        list.push(group.guests[i])
+      }
+    }
+    const updatedGroup = await Group.findOneAndUpdate({"groupId":groupId}, {"guests":list}, {new: true});
+  }
+}
 
 module.exports = { handleNewGroup,addMember, getAll,
   getAllMembers,getAllInvites,leaveGroup,
-  leaveDeleteGroup,setStartDate,setEndDate,getStartDate,getEndDate,getAllMembersWithBank,updateBankInfo};
+  leaveDeleteGroup,setStartDate,setEndDate,getStartDate,getEndDate,getAllMembersWithBank,updateBankInfo
+  ,updatePercentLeft,getBudget,setBudget,getBankName};

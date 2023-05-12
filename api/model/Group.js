@@ -13,6 +13,9 @@ const groupSchema = new Schema({
         },
         bankName:{
             type:String,
+        },
+        budget:{
+            type:Number
         }
     },
     groupName:{
@@ -31,6 +34,13 @@ const groupSchema = new Schema({
             type:String,
             
         },
+        budget:{
+            type:Number
+        },
+        percentLeft:{
+            type:Number
+        }
+
     }],
     startDate:{
         type:Date

@@ -6,6 +6,19 @@ const querystring=require('querystring')
 
 
 const configuration = new Configuration({
+    basePath: PlaidEnvironments.development,
+    baseOptions: {
+        headers: {
+            'PLAID-CLIENT-ID': '64226b0770185800147fdf0d',
+            'PLAID-SECRET': '4de4a569525971b222a29eaa088610',
+        },
+    },
+});
+
+const plaidClient = new PlaidApi(configuration);
+
+
+const configuration2 = new Configuration({
     basePath: PlaidEnvironments.sandbox,
     baseOptions: {
         headers: {
@@ -15,14 +28,16 @@ const configuration = new Configuration({
     },
 });
 
-const plaidClient = new PlaidApi(configuration);
-
+const plaidClient2 = new PlaidApi(configuration2);
 
 router.post("/hello", (request, response) => {
     response.json({message: "hello " + request.body.name});
 });
 
 router.post('/create_link_token', async function (request, response) {
+    console.log(plaidClient)
+    console.log("breal")
+    console.log(plaidClient2)
 
     const plaidRequest = {
         user: {
@@ -31,16 +46,17 @@ router.post('/create_link_token', async function (request, response) {
         client_name: 'Plaid Test App',
         products: ['auth'],
         language: 'en',
-        redirect_uri: 'http://localhost:3500/',
+        redirect_uri: 'https://redirectmeto.com/http://localhost:3500',
         country_codes: ['US'],
     };
     try {
         const createTokenResponse = await plaidClient.linkTokenCreate(plaidRequest);
         response.json(createTokenResponse.data);
     } catch (error) {
-        response.status(500).send("failure");
-        // handle error
+        console.error(error);
+        response.status(500).json({ error: error.toString() });
     }
+    
 });
 
 router.post("/auth", async function(request, response) {
@@ -71,8 +87,10 @@ router.post('/exchange_public_token', async function (
         const accessToken = plaidResponse.data.access_token;
         response.json({ accessToken });
     } catch (error) {
-        response.status(500).send("failed");
+        console.error(error);
+        response.status(500).json({ error: error.toString() });
     }
+    
 });
 
 router.get('/transactions', async function(request, response) {

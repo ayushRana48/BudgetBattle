@@ -65,9 +65,9 @@ export default function Group({currentUser,groupName,groupId}){
             </button>
         </div>
         :
-        <div>
+        <div className="">
             {!loading?
-                <Main settingTrue={settingTrue} groupName={groupName} host={host} members={members} groupId={groupId} currentUser={currentUser}></Main>
+                <Main settingTrue={settingTrue} groupName={groupName} host={host} members={members} groupId={groupId} currentUser={currentUser} setting={setting}></Main>
                 :
                 <h1>loading</h1>}
         </div>

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import Card from './Card'
 
-export default function Main({settingTrue,host,members,groupId,currentUser,groupName}){
+export default function Main({settingTrue,host,members,groupId,currentUser,groupName,setting}){
 
     const navigate=useNavigate()
 
@@ -50,10 +50,10 @@ export default function Main({settingTrue,host,members,groupId,currentUser,group
 
     },[render])
 
-    const CardList=allPeople.map(x=><Card host={host} groupId={groupId} currentUser={currentUser} entireUser={x} connectBank={connectBank} reRender={reRender} getConnect={getConnect}></Card>)
+    const CardList=allPeople.map(x=><Card host={host} groupId={groupId} currentUser={currentUser} entireUser={x} connectBank={connectBank} reRender={reRender} getConnect={getConnect} setting={setting}></Card>)
 
     return(
-        <div>  
+        <div className="mb-16">  
             <button onClick={settingTrue} className="absolute top-4 right-8 hover:bg-darkPurple hover:rounded-md rounded-md w-12 h-8 bg-purple text-white mt-2 ml-2">
                 <img className="w-6 ml-[0.75rem] mb-[0.25rem]" src="/Setting.svg"/>
             </button>
@@ -62,7 +62,7 @@ export default function Main({settingTrue,host,members,groupId,currentUser,group
             </button>
             <h1 className="text-lg mt-8 mb-1">{groupName}</h1>
             <h1 className="text-m  mb-8">By: {host.name}</h1>
-            <div className="grid grid-cols-2 gap-4 w-[50%] ml-[25%]"> {/* Add this line */}
+            <div className="grid grid-cols-2 gapx-4 w-[50%] ml-[30%] mb-16"> {/* Add this line */}
                 {CardList}
             </div>
 

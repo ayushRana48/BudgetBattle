@@ -15,7 +15,12 @@ router.get('/getStartDate', groupController.getStartDate);
 router.get('/getEndDate', groupController.getEndDate);
 router.get('/getAllMembersWithBank', groupController.getAllMembersWithBank);
 router.put('/updateBankInfo', groupController.updateBankInfo);
+router.get('/getAllMembersWithBank', groupController.getAllMembersWithBank);
+router.put('/setBudget', groupController.setBudget);
+router.get('/getBudget', groupController.getBudget);
+router.get('/getBankName', groupController.getBankName);
 
+router.put('/updatePercentLeft',groupController.updatePercentLeft);
 
 
 module.exports = router;

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 
 
-export default function Card({groupId,entireUser,currentUser,host,connectBank,reRender,getConnect}){
+export default function Card({groupId,entireUser,currentUser,host,connectBank,getConnect,setting}){
     
     const [rem,setRem]=useState(40)
 
@@ -26,6 +26,27 @@ export default function Card({groupId,entireUser,currentUser,host,connectBank,re
             return x.bankName;
         }
     });
+
+
+    useEffect(()=>{
+        const url = `http://localhost:3500/group/getBankName?groupId=${groupId}&user=${currentUser}&host=${host}`;
+        let bank="";
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${groupId}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            bank=data
+            console.log(bank)
+            setCurrentBank(bank)
+        })
+        .catch(err => console.log(err));
+
+    },[])
 
 
 
@@ -94,7 +115,7 @@ export default function Card({groupId,entireUser,currentUser,host,connectBank,re
 
 
     return(
-        <div className="w-48 justify bg-hoverGray p-4 border-black h-68 border-2 rounded-lg"> 
+        <div className="w-48 justify p-4 border-black h-68 border mb-6 rounded-lg"> 
             <img className="w-[80%] ml-[10%]" src="/MemberIcon.svg"></img>
             <h1 className="w-[80%] ml-[10%] text-ellipsis overflow-hidden font-semibold text-m">{entireUser.name}</h1>
             {isCurrent?
