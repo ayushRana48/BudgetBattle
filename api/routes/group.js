@@ -19,8 +19,9 @@ router.get('/getAllMembersWithBank', groupController.getAllMembersWithBank);
 router.put('/setBudget', groupController.setBudget);
 router.get('/getBudget', groupController.getBudget);
 router.get('/getBankName', groupController.getBankName);
-
+router.get('/getPercentLeft', groupController.getPercentLeft);
 router.put('/updatePercentLeft',groupController.updatePercentLeft);
+router.get('/getAccessToken', groupController.getAccessToken);
 
 
 module.exports = router;

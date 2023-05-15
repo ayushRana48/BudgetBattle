@@ -17,12 +17,13 @@ export default function GroupSetting({currentUser,groupName,groupId}){
 
     const [dates,setDates]=useState({startDate:"Set Date",endDate:"Set Date"})
 
-    const [budget,setBudget]=useState()
+    const [budget,setBudget]=useState(500)
     const [saveBudget,setSaveBudget]=useState()
 
     const [editBudget,setEditBudget]=useState(false)
 
     useEffect(()=>{
+        console.log("dzlijdkls")
         const url = `http://localhost:3500/group/getBudget?groupId=${groupId}&user=${currentUser}&host=${host}`;
         let num=0;
         fetch(url, {
@@ -35,6 +36,7 @@ export default function GroupSetting({currentUser,groupName,groupId}){
         .then(response => response.json())
         .then(data => {
             num=data
+            console.log(data)
             num = Number(num.toFixed(2));
             num = num.toLocaleString("en-US");
             console.log(num)

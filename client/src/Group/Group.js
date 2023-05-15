@@ -7,6 +7,10 @@ export default function Group({currentUser,groupName,groupId}){
     const navigate=useNavigate()
     const [members,setMembers]=useState([])
     const [host,setHost]=useState([])
+    const [startDate,setStartDate]=useState()
+    const [endDate,setEndDate]=useState()
+    const [sentInvites,setSentInvites]=useState()
+
     const [setting,setSetting]=useState(false)
     const [loading,setLoading]=useState(true)
 

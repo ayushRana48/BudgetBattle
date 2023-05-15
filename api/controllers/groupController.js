@@ -74,16 +74,14 @@ const getAllMembers = async (req,res)=>{
 
   const groupId=parsedQuery.groupId
   const group=await Group.findOne({groupId:groupId}).exec();
-  let list =[]
-  console.log(group.guests)
-  for(let i=0;i<group.guests.length;i++){
-    
-    list.push(group.guests[i].name)
-  }
-  console.log(list)
 
-  res.json({host:group.host.name,guests:list})
+  res.json({host:group.host.name,guests:group.host.guests,
+    startDate:group.startDate,
+    endDate:group.endDate,
+    sentInvites:group.sentInvites})
 }
+
+
 
 //kinda redundant to first but o well
 const getAllMembersWithBank = async (req,res)=>{
@@ -284,6 +282,7 @@ const getBudget = async (req,res)=>{
       }
     }
   }
+  console.log("done")
 }
 
 const getBankName = async (req,res)=>{
@@ -332,7 +331,49 @@ const updatePercentLeft = async (req,res)=>{
   }
 }
 
+const getPercentLeft = async (req,res)=>{
+  const parsedUrl=url.parse(req.url)
+  const parsedQuery=querystring.parse(parsedUrl.query)
+
+  const groupId=parsedQuery.groupId
+  const user=parsedQuery.user
+  const host=parsedQuery.host
+
+
+  const group=await Group.findOne({groupId:groupId}).exec();
+  if(host===user){
+    res.json(group.host.percentLeft)
+  }
+  else{
+    for(let i=0;i<group.guests.length;i++){
+      if(group.guests[i].name===user){
+        res.json(group.guests[i].percentLeft)
+        return
+      }
+    }
+  }
+}
+
+const getAccessToken = async (req,res)=>{
+  const parsedUrl=url.parse(req.url)
+  const parsedQuery=querystring.parse(parsedUrl.query)
+
+  const user=parsedQuery.user
+  const bankName=parsedQuery.bankName
+
+  const entireUser=await User.findOne({username:user}).exec();
+  console.log(entireUser)
+  const userBanks=entireUser.banks;
+  
+  let accessToken=""
+  for(let i=0;i<userBanks.length;i++){
+    if(userBanks[i].bankName===bankName){
+      res.json(userBanks[i].accessToken)
+    }
+  }
+}
+
 module.exports = { handleNewGroup,addMember, getAll,
   getAllMembers,getAllInvites,leaveGroup,
   leaveDeleteGroup,setStartDate,setEndDate,getStartDate,getEndDate,getAllMembersWithBank,updateBankInfo
-  ,updatePercentLeft,getBudget,setBudget,getBankName};
+  ,updatePercentLeft,getBudget,setBudget,getBankName,getPercentLeft,getAccessToken};

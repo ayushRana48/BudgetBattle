@@ -16,6 +16,10 @@ export default function Card({groupId,entireUser,currentUser,host,connectBank,ge
 
     const[show,setShow]= useState(connectBank)
 
+    const[accessToken,setAccessToken]=useState()
+
+    const[budget,setBudget]=useState()
+
 
 
 
@@ -28,6 +32,7 @@ export default function Card({groupId,entireUser,currentUser,host,connectBank,ge
     });
 
 
+    //get bankName
     useEffect(()=>{
         const url = `http://localhost:3500/group/getBankName?groupId=${groupId}&user=${currentUser}&host=${host}`;
         let bank="";
@@ -43,11 +48,49 @@ export default function Card({groupId,entireUser,currentUser,host,connectBank,ge
             bank=data
             console.log(bank)
             setCurrentBank(bank)
+            
+
         })
         .catch(err => console.log(err));
 
     },[])
 
+    //get AccessToken
+    useEffect(()=>{
+        const url = `http://localhost:3500/group/getAccessToken?user=${entireUser.name}&bankName=${currentBank}`;
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${groupId}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(`${entireUser.name} ${data}`)
+            setAccessToken(data)
+        })
+        .catch(err => console.log(err));
+
+    },[currentBank])
+
+    //get budget
+    useEffect(()=>{
+        const url = `http://localhost:3500/group/getBudget?user=${entireUser.name}&groupId=${groupId}&host=${host}`;
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${groupId}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(`${entireUser.name} ${data}`)
+            setBudget(data)
+        })
+        .catch(err => console.log(err));
+    },[])
 
 
     const optionList=options.map(x=><option className="w-8" value={x}>{x}</option>)
@@ -110,8 +153,11 @@ export default function Card({groupId,entireUser,currentUser,host,connectBank,ge
 
     }
 
+    function calcPercent(){
 
-    console.log(`BANKCONNNEXT ${connectBank} sssss ${show}`)
+    }
+
+
 
 
     return(
