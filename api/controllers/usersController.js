@@ -183,8 +183,33 @@ const acceptInvites = async (req, res) => {
 
   const foundGroup1 = await Group.findOne({groupId:groupId}).exec();
 
+  if (!foundGroup1) {
+    const userUpdate = {
+      $pull: { groupInvites: { groupId, groupName } }
+    };
+    const options = { new: true };
+  
+    const foundUser = await User.findOneAndUpdate(
+      { username: user },
+      userUpdate,
+      options
+    ).exec();
+    return res.status(404).json({ error: 'Group deletedd' });
+  }
+
   const inGroup= foundGroup1 ? foundGroup1.guests.includes(user):false
   if (inGroup) {
+    const userUpdate = {
+      $pull: { groupInvites: { groupId, groupName } },
+      $push: { groups: { groupId, groupName } }
+    };
+
+    const foundUser = await User.findOneAndUpdate(
+      { username: user },
+      userUpdate,
+      options
+    ).exec();
+
     return res.status(409).json({ error: 'Already in Group' });
   }
 

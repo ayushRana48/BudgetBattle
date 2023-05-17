@@ -4,24 +4,19 @@ import GroupSetting from "./GroupSetting";
 import Main from "./Main/Main";
 
 export default function Group({currentUser,groupName,groupId}){
-    const navigate=useNavigate()
     const [members,setMembers]=useState([])
     const [host,setHost]=useState([])
-    const [startDate,setStartDate]=useState()
-    const [endDate,setEndDate]=useState()
+    const [startDate,setStartDate]=useState("Set Date")
+    const [endDate,setEndDate]=useState("Set Date")
     const [sentInvites,setSentInvites]=useState()
+    const [renderMembers,setRenderMembers]= useState(true)
+
+
 
     const [setting,setSetting]=useState(false)
     const [loading,setLoading]=useState(true)
 
     
-
-    useEffect(()=>{
-        let set= JSON.parse(localStorage.getItem('settingGroup'));
-        if(set){
-            setSetting(set)
-        }
-    })
 
     function settingTrue(){
         setSetting(true)
@@ -36,8 +31,11 @@ export default function Group({currentUser,groupName,groupId}){
     }
 
 
+
+
+    //change this url name later
     useEffect(()=>{
-        const url = `http://localhost:3500/group/getAllMembersWithBank?groupId=${groupId}`;
+        const url = `http://localhost:3500/group/getAllMembers?groupId=${groupId}`;
         fetch(url, {
             method: 'GET',
             headers: {
@@ -51,19 +49,52 @@ export default function Group({currentUser,groupName,groupId}){
             setHost(data.host)
             setMembers(data.guests)
             setLoading(false)
+
+            if(data.startDate){
+                let date = new Date(data.startDate);
+                const options = {
+                    month: 'numeric',
+                    day: 'numeric',
+                    year: 'numeric'
+                };
+                let startDate = date.toLocaleDateString('en-US', options);
+                setStartDate(startDate)
+            }
+            
+            if(data.endDate){
+                let date = new Date(data.endDate);
+                const options = {
+                    month: 'numeric',
+                    day: 'numeric',
+                    year: 'numeric'
+                };
+                let endDate = date.toLocaleDateString('en-US', options);
+                setEndDate(endDate)
+            }
+            
+            setSentInvites(data.sentInvites)
+            console.log("yysdiasdj")
+            console.log(startDate)
+
         })
         .catch(err => console.log(err));
         console.log("call four")
-    },[])
+    },[renderMembers])
 
-    console.log(host)
-    console.log(members)
-
+    function reRender(){
+        setRenderMembers((x)=>!x)
+    }
 
     return(
         setting?
         <div>
-            <GroupSetting currentUser={currentUser} groupName={groupName} groupId={groupId}></GroupSetting>
+            {!loading?
+                <GroupSetting currentUser={currentUser} groupName={groupName} groupId={groupId} 
+                hostP={host} guests={members} startDate={startDate} endDate={endDate} sentInvitesP={sentInvites}></GroupSetting>
+                :
+                <h1>loading</h1>
+            }
+
             <button onClick={settingFalse}className="absolute top-4 left-8 py-1 hover:bg-darkPurple rounded-md bg-purple px-6 text-white mt-2 ml-2">
             <img src="/goBack.svg" className="w-10" alt="Go Back" />
             </button>

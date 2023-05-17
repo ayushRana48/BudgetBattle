@@ -5,17 +5,17 @@ import Member from "./Member";
 import InviteMember from "./InviteMember";
 import DateRangePicker from "./DateRangePicker"
 
-export default function GroupSetting({currentUser,groupName,groupId}){
+export default function GroupSetting({currentUser,groupName,groupId,hostP,guests,startDate,endDate,sentInvitesP,reRender}){
     const navigate=useNavigate()
-    const [members,setMembers]=useState([])
-    const [host,setHost]=useState([])
+    const [members,setMembers]=useState(guests)
+    const [host,setHost]=useState(hostP)
     const [renderMembers,setRenderMembers]= useState(true)
 
-    const [invites,setInvites]=useState([])
+    const [invites,setInvites]=useState(sentInvitesP)
     const [lastMember,setLastMember]=useState(false)
 
 
-    const [dates,setDates]=useState({startDate:"Set Date",endDate:"Set Date"})
+    const [dates,setDates]=useState({startDate:startDate,endDate:endDate})
 
     const [budget,setBudget]=useState(500)
     const [saveBudget,setSaveBudget]=useState()
@@ -23,128 +23,36 @@ export default function GroupSetting({currentUser,groupName,groupId}){
     const [editBudget,setEditBudget]=useState(false)
 
     useEffect(()=>{
-        console.log("dzlijdkls")
-        const url = `http://localhost:3500/group/getBudget?groupId=${groupId}&user=${currentUser}&host=${host}`;
-        let num=0;
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${groupId}`,
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            num=data
-            console.log(data)
-            num = Number(num.toFixed(2));
-            num = num.toLocaleString("en-US");
-            console.log(num)
-            setBudget(num)
-            setSaveBudget(num)
-        })
-        .catch(err => console.log(err));
+        console.log(guests)
+        console.log(members)
+        console.log(host)
 
+
+        if(guests.length===0){
+            if(host.budget){
+                setBudget(host.budget)
+            }
+        }
+        if(guests){
+            for(let i=0;i<guests.length;i++){
+                if(guests[i].username=currentUser){
+                    if(guests[i].budget){
+                        setBudget(guests[i].budget)
+                    }
+                }
+            }
+            
+        }
     },[])
 
-
     useEffect(()=>{
-        const url = `http://localhost:3500/group/getAllMembers?groupId=${groupId}`;
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${groupId}`,
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data)
-            setHost(data.host)
-            setMembers(data.guests)
-            if(data.guests.length==0){
-                setLastMember(true)
-            }
-            else{
-                setLastMember(false)
-            }
-        })
-        .catch(err => console.log(err));
-        console.log("call thjree")
-
-        const url2 = `http://localhost:3500/group/getAllInvites?groupId=${groupId}`;
-        fetch(url2, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${groupId}`,
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data.invites)
-            setInvites(data.invites)
-        })
-        .catch(err => console.log(err));
-        console.log("call thjree")
-
-    },[renderMembers])
-
-
-  useEffect(()=>{
-    const url = `http://localhost:3500/group/getStartDate?groupId=${groupId}`;
-       fetch(url, {
-           method: 'GET',
-           headers: {
-               'Authorization': `Bearer ${groupId}`,
-               'Content-Type': 'application/json'
-           }
-       })
-       .then(response => response.json())
-       .then(data => {
-        console.log(data)
-        console.log("fro, liken 88s")
-
-           if(data.startDate){
-                let date = new Date(data.startDate);
-                const options = {
-                month: 'numeric',
-                day: 'numeric',
-                year: 'numeric'
-                };
-                let outputDate = date.toLocaleDateString('en-US', options);
-
-             setDates((y) => ({ ...y, startDate: outputDate }));
-           }
-       })
-       .catch(err => console.log(err));
-
-       const url2 = `http://localhost:3500/group/getEndDate?groupId=${groupId}`;
-       fetch(url2, {
-           method: 'GET',
-           headers: {
-               'Authorization': `Bearer ${groupId}`,
-               'Content-Type': 'application/json'
-           }
-       })
-       .then(response => response.json())
-       .then(data => {
-         if(data.endDate){
-
-            let date = new Date(data.endDate);
-                const options = {
-                month: 'numeric',
-                day: 'numeric',
-                year: 'numeric'
-                };
-                let outputDate = date.toLocaleDateString('en-US', options);
-
-             setDates((y) => ({ ...y, endDate: outputDate }));
-         }
-       })
-       .catch(err => console.log(err));
-
-   },[])
+        if(guests.length===0){
+            setLastMember(true)
+        }
+        else{
+            setLastMember(false)
+        }
+    },[guests])
 
     function leave(){
         let url;
@@ -175,9 +83,7 @@ export default function GroupSetting({currentUser,groupName,groupId}){
     }
 
 
-    function reRender(){
-        setRenderMembers((x)=>!x)
-    }
+
 
     function updateBudget(){
         console.log(budget)
@@ -212,36 +118,31 @@ export default function GroupSetting({currentUser,groupName,groupId}){
                 "user":currentUser,
                 "groupId":groupId,
                 "budget":budget,
-                "host":host
+                "host":host.name
             }),
         })
         .then(response => response.json())
         .then(data => {
+
         })
         .catch(err => console.log(err));
         console.log("call four")
         setEditBudget(false)
-
-
-
     }
-
     
-    const memberCompList=members.map(x=><Member username={x}></Member>)
+    const memberCompList=members.map(x=><Member username={x.name}></Member>)
     const inviteMemberCompList=invites.map(x=><InviteMember username={x}></InviteMember>)
-
-    console.log("user and host")
-    console.log(currentUser)
-    console.log(host)
-    console.log(currentUser===host)
 
     function getStartDate(x){
         setDates((y) => ({ ...y, startDate: x }));
     }
 
-    console.log(dates.endDate)
     function getEndDate(x){
         setDates((y) => ({ ...y, endDate: x }));
+    }
+
+    function addInvite(x){
+        setInvites(y=>[...y,x])
     }
 
 
@@ -250,7 +151,7 @@ export default function GroupSetting({currentUser,groupName,groupId}){
         <div>
                 <div>
                     <h1 className="text-lg mt-8 mb-1">{groupName}</h1>
-                    <h1 className="text-m  mb-8">By: {host}</h1>
+                    <h1 className="text-m  mb-8">By: {host.name}</h1>
 
                     <div className=" mb-8">
                         {editBudget?
@@ -278,7 +179,7 @@ export default function GroupSetting({currentUser,groupName,groupId}){
                     
 
                     </div>
-                    {currentUser===host?
+                    {currentUser===host.name?
                     <div >
                        <DateRangePicker groupId={groupId} getStartDate={getStartDate} getEndDate={getEndDate} startDate1={dates.startDate} endDate1={dates.endDate}></DateRangePicker>
                     </div>
@@ -296,11 +197,11 @@ export default function GroupSetting({currentUser,groupName,groupId}){
                     
                     }
                     <h1 className="text-m mt-8">Members</h1>
-                    <Member username={host}></Member>
+                    <Member username={host.name}></Member>
                     {memberCompList}
                     {inviteMemberCompList.length?<h1 className="text-sm">Pending</h1>:null}
                     {inviteMemberCompList}
-                    <SearchBar reRender={reRender} currentUser={currentUser} groupId={groupId} groupName={groupName}></SearchBar>
+                    <SearchBar reRender={reRender} currentUser={currentUser} groupId={groupId} groupName={groupName} invites={invites} members={members} host ={host} addInvite={addInvite}></SearchBar>
 
                     <button onClick ={leave}className="mt-6 mb-12 bg-red rounded-md px-6 py-2 text-white font-bold">{lastMember?"Delete Group":"Leave Group"}</button>
                 </div>         

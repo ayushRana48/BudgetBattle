@@ -32,28 +32,28 @@ export default function Card({groupId,entireUser,currentUser,host,connectBank,ge
     });
 
 
-    //get bankName
-    useEffect(()=>{
-        const url = `http://localhost:3500/group/getBankName?groupId=${groupId}&user=${currentUser}&host=${host}`;
-        let bank="";
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${groupId}`,
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            bank=data
-            console.log(bank)
-            setCurrentBank(bank)
+    // //get bankName
+    // useEffect(()=>{
+    //     const url = `http://localhost:3500/group/getBankName?groupId=${groupId}&user=${currentUser}&host=${host}`;
+    //     let bank="";
+    //     fetch(url, {
+    //         method: 'GET',
+    //         headers: {
+    //             'Authorization': `Bearer ${groupId}`,
+    //             'Content-Type': 'application/json'
+    //         }
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         bank=data
+    //         console.log(bank)
+    //         setCurrentBank(bank)
             
 
-        })
-        .catch(err => console.log(err));
+    //     })
+    //     .catch(err => console.log(err));
 
-    },[])
+    // },[])
 
     //get AccessToken
     useEffect(()=>{
@@ -74,23 +74,23 @@ export default function Card({groupId,entireUser,currentUser,host,connectBank,ge
 
     },[currentBank])
 
-    //get budget
-    useEffect(()=>{
-        const url = `http://localhost:3500/group/getBudget?user=${entireUser.name}&groupId=${groupId}&host=${host}`;
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${groupId}`,
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(`${entireUser.name} ${data}`)
-            setBudget(data)
-        })
-        .catch(err => console.log(err));
-    },[])
+    // //get budget
+    // useEffect(()=>{
+    //     const url = `http://localhost:3500/group/getBudget?user=${entireUser.name}&groupId=${groupId}&host=${host}`;
+    //     fetch(url, {
+    //         method: 'GET',
+    //         headers: {
+    //             'Authorization': `Bearer ${groupId}`,
+    //             'Content-Type': 'application/json'
+    //         }
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         console.log(`${entireUser.name} ${data}`)
+    //         setBudget(data)
+    //     })
+    //     .catch(err => console.log(err));
+    // },[])
 
 
     const optionList=options.map(x=><option className="w-8" value={x}>{x}</option>)
@@ -216,6 +216,7 @@ export default function Card({groupId,entireUser,currentUser,host,connectBank,ge
             
 
         </div>
+
 
 
     ) 

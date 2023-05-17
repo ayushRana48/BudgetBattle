@@ -12,65 +12,10 @@ const DateRangePicker = ({getStartDate,getEndDate,groupId,startDate1,endDate1}) 
 
 
 
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [startDate, setStartDate] = useState(startDate1);
+  const [endDate, setEndDate] = useState(endDate1);
   const [edit,setEdit]= useState(false)
 
-
-  useEffect(()=>{
-    const url = `http://localhost:3500/group/getStartDate?groupId=${groupId}`;
-       fetch(url, {
-           method: 'GET',
-           headers: {
-               'Authorization': `Bearer ${groupId}`,
-               'Content-Type': 'application/json'
-           }
-       })
-       .then(response => response.json())
-       .then(data => {
-        console.log(data)
-        console.log("fro, liken 88s")
-
-           if(data.startDate){
-                let date = new Date(data.startDate);
-                const options = {
-                month: 'numeric',
-                day: 'numeric',
-                year: 'numeric'
-                };
-                let outputDate = date.toLocaleDateString('en-US', options);
-
-                setStartDate(outputDate)
-              }
-       })
-       .catch(err => console.log(err));
-
-       const url2 = `http://localhost:3500/group/getEndDate?groupId=${groupId}`;
-       fetch(url2, {
-           method: 'GET',
-           headers: {
-               'Authorization': `Bearer ${groupId}`,
-               'Content-Type': 'application/json'
-           }
-       })
-       .then(response => response.json())
-       .then(data => {
-         if(data.endDate){
-
-            let date = new Date(data.endDate);
-                const options = {
-                month: 'numeric',
-                day: 'numeric',
-                year: 'numeric'
-                };
-                let outputDate = date.toLocaleDateString('en-US', options);
-
-             setEndDate(outputDate)
-         }
-       })
-       .catch(err => console.log(err));
-
-   },[])
 
 
 
@@ -140,11 +85,6 @@ console.log(timestamp);
         console.log(data)
     })
     .catch(err => console.log(err));
-
-    localStorage.setItem('startDate', JSON.stringify(startDate));
-    localStorage.setItem('endDate', JSON.stringify(endDate));
-
-
     setEdit(false)
 
   }

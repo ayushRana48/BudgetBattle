@@ -24,9 +24,17 @@ export default function Invite({currentUser,groupName,groupId,inviter,reRenderIn
         .then(response => response.json())
         .then(data => {
             console.log(data)
+            if(data.error==="Group deletedd"){
+                console.log("fffff")
+                alert("Group No Longer Exists")
+            }
             reRenderInvites()
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log("fdddddfff")
+            console.log(err)
+
+        });
     }
     console.log("user from IUnvite ")
     console.log(currentUser)

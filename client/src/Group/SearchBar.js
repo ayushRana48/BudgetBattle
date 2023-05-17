@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react';
 
-export default function SearchBar({groupId,currentUser,reRender,groupName}) {
+export default function SearchBar({groupId,currentUser,groupName,addInvite,members,host,invites}) {
   const[people,setPeople]=useState([])
   
   const [query, setQuery] = useState();
@@ -52,6 +52,22 @@ export default function SearchBar({groupId,currentUser,reRender,groupName}) {
   }
 
   function sendInvite(){
+    if(invites.includes(query)){
+      alert("Already Invited")
+      return;
+    }
+    if(host.name===query){
+      alert("Already in Group")
+      return;
+    }
+
+    const memberNames= members.map(x=>x.name)
+    if(memberNames.includes(query)){
+      alert("Already in Group")
+      return;
+    }
+
+    console.log(memberNames)
     if(!people.includes(query)){
       alert("Not registered user")
     }
@@ -71,7 +87,7 @@ export default function SearchBar({groupId,currentUser,reRender,groupName}) {
         .then(response => response.json())
         .then(data => {
             console.log(data)
-            reRender()
+            addInvite(query)
         })
         .catch(err => console.log(err));
     }

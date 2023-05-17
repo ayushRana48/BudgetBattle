@@ -75,7 +75,7 @@ const getAllMembers = async (req,res)=>{
   const groupId=parsedQuery.groupId
   const group=await Group.findOne({groupId:groupId}).exec();
 
-  res.json({host:group.host.name,guests:group.host.guests,
+  res.json({host:group.host,guests:group.guests,
     startDate:group.startDate,
     endDate:group.endDate,
     sentInvites:group.sentInvites})
@@ -363,7 +363,15 @@ const getAccessToken = async (req,res)=>{
 
   const entireUser=await User.findOne({username:user}).exec();
   console.log(entireUser)
-  const userBanks=entireUser.banks;
+  let userBanks;
+  if(entireUser){
+    userBanks=entireUser.banks;
+  }
+  else{
+    userBanks=[]
+  }
+  
+
   
   let accessToken=""
   for(let i=0;i<userBanks.length;i++){
