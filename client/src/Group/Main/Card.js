@@ -57,20 +57,7 @@ export default function Card({groupId,entireUser,currentUser,host,connectBank,ge
 
     //get AccessToken
     useEffect(()=>{
-        const url = `http://localhost:3500/group/getAccessToken?user=${entireUser.name}&bankName=${currentBank}`;
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${groupId}`,
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(`${entireUser.name} ${data}`)
-            setAccessToken(data)
-        })
-        .catch(err => console.log(err));
+
 
     },[currentBank])
 
@@ -96,11 +83,11 @@ export default function Card({groupId,entireUser,currentUser,host,connectBank,ge
     const optionList=options.map(x=><option className="w-8" value={x}>{x}</option>)
     
     useEffect(()=>{
-        const url = `http://localhost:3500/users/getBanks?username=${currentUser}`;
+        const url = `http://localhost:3500/users/getBanks?username=${entireUser.name}`;
         fetch(url, {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${currentUser}`,
+                'Authorization': `Bearer ${entireUser.name}`,
                 'Content-Type': 'application/json'
             }
         })
@@ -150,12 +137,49 @@ export default function Card({groupId,entireUser,currentUser,host,connectBank,ge
         })
         .catch(err => console.log(err));
         setIsEdit(false)
+        console.log(`show ${show}`)
 
     }
 
+    //in here pass username and bank name
+    //return percentage
     function calcPercent(){
-
+        const url = `http://localhost:3500/group/getAccessToken?user=${entireUser.name}&bankName=${currentBank}`;
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${groupId}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(`${entireUser.name} ${data}`)
+            setAccessToken(data)
+            if(data){
+                console.log("callwawawa111")
+                const url2=`http://localhost:3500/plaid/transactions?accessTokens=${data}`;
+                fetch(url2, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${data}`,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data=>{
+                    console.log(data)
+                    console.log("callwawawa")
+                })
+                .catch(err=>console.log(err))
+            }
+        })
+        .catch(err => console.log(err));
     }
+
+    useEffect(()=>{
+        calcPercent()
+    },[currentBank])
 
 
 
@@ -166,15 +190,22 @@ export default function Card({groupId,entireUser,currentUser,host,connectBank,ge
             <h1 className="w-[80%] ml-[10%] text-ellipsis overflow-hidden font-semibold text-m">{entireUser.name}</h1>
             {isCurrent?
                 isEdit || !connectBank?
+                    <div>
                     <div className="flex mt-2">
                         <select value={currentBank} className="w-24 mr-2 mb-6 h-6 border border-black rounded-md" onChange={e=>setCurrentBank((x)=>(e.target.value))}>
                             <option value="Select...">{"Select..."}</option>
                             {optionList}
                         </select>
                         <button onClick={saveBankk}  className="h-6 px-1 text-xs text-white bg-purple hover:bg-darkPurple hover:cursor-pointer rounded-md">save</button>
-
-
-
+    
+                    </div>
+                        {connectBank&&
+             <div className="bg-[#b0acac] w-100%  h-6 p-[0.2rem] rounded-md mb-6">
+             <div className="h-[100%] w-[100%]  bg-purple rounded-md justify-start">
+                 <p className="text-white mr-[70%] text-xs">100%</p>
+             </div>
+         </div> 
+                        }
                     </div>
                     :
                     <div>
@@ -184,20 +215,42 @@ export default function Card({groupId,entireUser,currentUser,host,connectBank,ge
                                 <img className="w-4"src='/Edit.svg'></img>
                             </button>                    
                         </div>
-       
+                        <div className="bg-[#b0acac] w-100%  h-6 p-[0.2rem] rounded-md mb-6">
+                            <div className="h-[100%] w-[100%]  bg-purple rounded-md justify-start">
+                                <p className="text-white mr-[70%] text-xs">100%</p>
+                            </div>
+                        </div>  
                     </div>
 
             :
-                connectBank?
-                <h1 className="mb-6 w-28  ml-6 mt-2 text-ellipsis overflow-hidden h-6">{entireUser.bankName}</h1>
+                entireUser.bankName?
+
+                    connectBank?
+                    <div>
+                        <h1 className="mb-6 w-28  ml-6 mt-2 text-ellipsis overflow-hidden h-6">{entireUser.bankName}</h1>
+                        <div className="bg-[#b0acac] w-100%  h-6 p-[0.2rem] rounded-md mb-6">
+                                <div className="h-[100%] w-[100%]  bg-purple rounded-md justify-start">
+                                    <p className="text-white mr-[70%] text-xs">100%</p>
+                                </div>
+                        </div>  
+                    </div>
+                    :
+                    <div className="w-100% h-20 p-[0.2rem] rounded-md mb-6">
+
+                        <h1 className="text-[15px] mt-8">Select Bank Account</h1>
+                    </div>
+                    
                 :
-                <h1 className="mb-6 w-28  ml-6 mt-2 text-ellipsis overflow-hidden h-6"></h1>
+                <div className="w-100% h-20 p-[0.2rem] rounded-md mb-6">
+ 
+                        <h1 className="text-[15px] mt-8">No Bank Connected</h1>
+                    </div>  
 
 
             }
 
             
-            {connectBank && entireUser.bankName ?
+            {/* {show ?
             <div className="bg-[#b0acac] w-100%  h-6 p-[0.2rem] rounded-md mb-6">
                 <div className="h-[100%] w-[100%]  bg-purple rounded-md justify-start">
                     <p className="text-white mr-[70%] text-xs">100%</p>
@@ -213,7 +266,7 @@ export default function Card({groupId,entireUser,currentUser,host,connectBank,ge
                         <h1 className="text-[15px]">No Bank Connected</h1>
                     </div>  
             }
-            
+             */}
 
         </div>
 

@@ -9,6 +9,7 @@ router.get('/getUserInfo', userController.getUserInfo);
 router.put('/addBank',userController.addBank)
 router.put('/deleteBank',userController.deleteBank)
 router.get('/getBanks',userController.getUserBanks)
+router.get('/getAccessToken',userController.getAccessToken)
 
 
 router.get('/getGroups',userController.getUserGroups)

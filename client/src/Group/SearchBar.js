@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react';
 
-export default function SearchBar({groupId,currentUser,groupName,addInvite,members,host,invites}) {
+export default function SearchBar({groupId,currentUser,groupName,addInvite,addInvite2,members,host,invites}) {
   const[people,setPeople]=useState([])
   
   const [query, setQuery] = useState();
@@ -88,6 +88,7 @@ export default function SearchBar({groupId,currentUser,groupName,addInvite,membe
         .then(data => {
             console.log(data)
             addInvite(query)
+            addInvite2(query)
         })
         .catch(err => console.log(err));
     }

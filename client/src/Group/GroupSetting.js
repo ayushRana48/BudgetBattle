@@ -5,7 +5,7 @@ import Member from "./Member";
 import InviteMember from "./InviteMember";
 import DateRangePicker from "./DateRangePicker"
 
-export default function GroupSetting({currentUser,groupName,groupId,hostP,guests,startDate,endDate,sentInvitesP,reRender}){
+export default function GroupSetting({currentUser,groupName,groupId,hostP,guests,startDate,endDate,sentInvitesP,personalBudget,reRender,getStartDate,getEndDate,addInvite,getPersonalBudget}){
     const navigate=useNavigate()
     const [members,setMembers]=useState(guests)
     const [host,setHost]=useState(hostP)
@@ -17,12 +17,15 @@ export default function GroupSetting({currentUser,groupName,groupId,hostP,guests
 
     const [dates,setDates]=useState({startDate:startDate,endDate:endDate})
 
-    const [budget,setBudget]=useState(500)
+    const [budget,setBudget]=useState(personalBudget)
     const [saveBudget,setSaveBudget]=useState()
 
     const [editBudget,setEditBudget]=useState(false)
 
+
     useEffect(()=>{
+        console.log(personalBudget)
+
         console.log(guests)
         console.log(members)
         console.log(host)
@@ -105,6 +108,8 @@ export default function GroupSetting({currentUser,groupName,groupId,hostP,guests
             return;
         }
         setSaveBudget(budget)
+        getPersonalBudget(budget)
+
 
         const url="http://localhost:3500/group/setBudget"
 
@@ -127,21 +132,26 @@ export default function GroupSetting({currentUser,groupName,groupId,hostP,guests
         })
         .catch(err => console.log(err));
         console.log("call four")
+        
         setEditBudget(false)
     }
     
     const memberCompList=members.map(x=><Member username={x.name}></Member>)
     const inviteMemberCompList=invites.map(x=><InviteMember username={x}></InviteMember>)
 
-    function getStartDate(x){
-        setDates((y) => ({ ...y, startDate: x }));
-    }
+    // function getStartDate(x){
+    //     console.log(x)
+    //     setDates((y) => ({ ...y, startDate: x }));
+    // }
 
-    function getEndDate(x){
-        setDates((y) => ({ ...y, endDate: x }));
-    }
+    // function getEndDate(x){
+    //     setDates((y) => ({ ...y, endDate: x }));
+    // }
 
-    function addInvite(x){
+    function addInvite2(x){
+        console.log(x)
+        console.log("dd")
+
         setInvites(y=>[...y,x])
     }
 
@@ -186,7 +196,7 @@ export default function GroupSetting({currentUser,groupName,groupId,hostP,guests
                         :
                         <div className="flex justify-center gap-x-20">
                             <div>
-                                <h1 className="text-sm">{dates.startDate.toString()}</h1>
+                                <h1 className="text-sm">{dates.startDate}</h1>
                                 <h1 className="text-xs">Start Date</h1>
                             </div>
                             <div>
@@ -201,7 +211,7 @@ export default function GroupSetting({currentUser,groupName,groupId,hostP,guests
                     {memberCompList}
                     {inviteMemberCompList.length?<h1 className="text-sm">Pending</h1>:null}
                     {inviteMemberCompList}
-                    <SearchBar reRender={reRender} currentUser={currentUser} groupId={groupId} groupName={groupName} invites={invites} members={members} host ={host} addInvite={addInvite}></SearchBar>
+                    <SearchBar reRender={reRender} currentUser={currentUser} groupId={groupId} groupName={groupName} invites={invites} members={members} host ={host} addInvite={addInvite} addInvite2={addInvite2}></SearchBar>
 
                     <button onClick ={leave}className="mt-6 mb-12 bg-red rounded-md px-6 py-2 text-white font-bold">{lastMember?"Delete Group":"Leave Group"}</button>
                 </div>         

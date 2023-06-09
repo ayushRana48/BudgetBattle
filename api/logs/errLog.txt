@@ -17,3 +17,4 @@
 20230403	13:31:39	5a822fc4-f80c-4cf4-a4fb-b00202c1710b	SyntaxError: Unexpected token o in JSON at position 1
 20230404	03:37:38	4902571d-18e9-4c6e-8cd2-d7a44507da5e	ReferenceError: Group is not defined
 20230404	03:37:43	3dfd901e-a1da-4492-85dd-38d2c8754576	ReferenceError: Group is not defined
+20230608	14:50:18	91d3e696-d89a-4a9c-8035-1af7f6a0c4bd	Error: Not allowed by CORS

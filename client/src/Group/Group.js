@@ -6,8 +6,8 @@ import Main from "./Main/Main";
 export default function Group({currentUser,groupName,groupId}){
     const [members,setMembers]=useState([])
     const [host,setHost]=useState([])
-    const [startDate,setStartDate]=useState("Set Date")
-    const [endDate,setEndDate]=useState("Set Date")
+    const [startDate,setStartDate]=useState()
+    const [endDate,setEndDate]=useState()
     const [sentInvites,setSentInvites]=useState()
     const [renderMembers,setRenderMembers]= useState(true)
 
@@ -16,6 +16,14 @@ export default function Group({currentUser,groupName,groupId}){
     const [setting,setSetting]=useState(false)
     const [loading,setLoading]=useState(true)
 
+    const[personalBudget,setPersonalBudget]=useState()
+
+    // useEffect(()=>{
+    //     let x= localStorage.getItem('settingGroup')
+    //     if(x){
+    //         setSetting(x)
+    //     }
+    // },[])
     
 
     function settingTrue(){
@@ -49,6 +57,38 @@ export default function Group({currentUser,groupName,groupId}){
             setHost(data.host)
             setMembers(data.guests)
             setLoading(false)
+            let budget;
+            console.log(data.host.name)
+            console.log(currentUser)
+            if(data.host.name===currentUser){
+                if(data.host.budget){
+                    console.log("innn")
+                    console.log(data.host.budget)
+                    budget=data.host.budget
+                }
+                else{
+                    console.log("outt")
+                    budget=500
+                }
+            }
+            else{
+                console.log("otu")
+
+                for(let i=0;i<data.guests.length;i++){
+                    if(data.guests[i].name===currentUser){
+                        if(data.guests[i].budget){
+                            budget=data.guests[i].budget
+                        }
+                        else{
+                            budget=500
+                        }
+                    }
+                }
+            }
+            console.log(budget)
+
+
+            setPersonalBudget(budget)
 
             if(data.startDate){
                 let date = new Date(data.startDate);
@@ -85,12 +125,30 @@ export default function Group({currentUser,groupName,groupId}){
         setRenderMembers((x)=>!x)
     }
 
+    function getStartDate(x){
+        console.log(x)
+        setStartDate(x);
+    }
+
+    function getEndDate(x){
+        setEndDate(x);
+    }
+
+    function addInvite(x){
+        setSentInvites(y=>[...y,x])
+    }
+
+    function getPersonalBudget(x){
+        setPersonalBudget(x)
+    }
+
     return(
         setting?
         <div>
             {!loading?
                 <GroupSetting currentUser={currentUser} groupName={groupName} groupId={groupId} 
-                hostP={host} guests={members} startDate={startDate} endDate={endDate} sentInvitesP={sentInvites}></GroupSetting>
+                hostP={host} guests={members} startDate={startDate} endDate={endDate} sentInvitesP={sentInvites} personalBudget={personalBudget}
+                getStartDate={getStartDate} getEndDate={getEndDate} addInvite={addInvite} getPersonalBudget={getPersonalBudget}></GroupSetting>
                 :
                 <h1>loading</h1>
             }

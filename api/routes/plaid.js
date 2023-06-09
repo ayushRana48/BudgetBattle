@@ -3,32 +3,25 @@ const router = express.Router();
 const { Configuration, PlaidApi, PlaidEnvironments } = require('plaid');
 const url=require('url')
 const querystring=require('querystring')
+require('dotenv').config();
 
 
 const configuration = new Configuration({
-    basePath: PlaidEnvironments.development,
+    basePath: PlaidEnvironments.sandbox,
     baseOptions: {
         headers: {
-            'PLAID-CLIENT-ID': '64226b0770185800147fdf0d',
-            'PLAID-SECRET': 'b7ddbdcec552e26961569df5566bca',
+            'PLAID-CLIENT-ID': process.env.PLAID_CLIENT_ID,
+            'PLAID-SECRET': process.env.PLAID_SECRET,
         },
     },
 });
+
+
 
 const plaidClient = new PlaidApi(configuration);
 
 
-const configuration2 = new Configuration({
-    basePath: PlaidEnvironments.sandbox,
-    baseOptions: {
-        headers: {
-            'PLAID-CLIENT-ID': '64226b0770185800147fdf0d',
-            'PLAID-SECRET': '6d19a956b7f1706f8c932f91786945',
-        },
-    },
-});
 
-const plaidClient2 = new PlaidApi(configuration2);
 
 router.post("/hello", (request, response) => {
     response.json({message: "hello " + request.body.name});
@@ -37,7 +30,6 @@ router.post("/hello", (request, response) => {
 router.post('/create_link_token', async function (request, response) {
     console.log(plaidClient)
     console.log("breal")
-    console.log(plaidClient2)
 
     const plaidRequest = {
         user: {
@@ -101,7 +93,7 @@ router.get('/transactions', async function(request, response) {
     const req = {
         access_token: accessToken,
         start_date: '2018-01-01',
-        end_date: '2023-02-01'
+        end_date: '2023-08-01'
       };
       try {
         const plaidResponse = await plaidClient.transactionsGet(req);

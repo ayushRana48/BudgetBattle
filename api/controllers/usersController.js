@@ -95,6 +95,32 @@ const getUserBanks=async(req,res)=>{
 }
 
 
+const getAccessToken=async(req,res)=>{
+  const parsedUrl=url.parse(req.url)
+  const parsedQuery=querystring.parse(parsedUrl.query)
+
+  const user=parsedQuery.username
+  const bank=parsedQuery.bank
+
+  const foundUser = await User.findOne({username:user}).exec();
+  if (!foundUser) return res.sendStatus(401); //Unauthorized 
+  let list=[]
+  let accessToken
+
+  //if not empty
+  if(foundUser.banks.length==0){
+    res.json("No Banks")
+  }
+  else{
+    for(let i=0;i<foundUser.banks.length;i++){
+      if(foundUser.banks.bankName===bank){
+        accessToken=foundUser.banks.accessToken
+      }
+    }
+  }
+  res.json(accessToken)
+}
+
 const getUserInfo=async(req,res)=>{
   const parsedUrl=url.parse(req.url)
   const parsedQuery=querystring.parse(parsedUrl.query)
@@ -288,4 +314,4 @@ const declineInvite = async (req,res)=>{
 
 module.exports = { getAllUsers,addBank,deleteBank,getUserBanks,getUserInfo,
   getUserGroups,sendInvite,getAllInvites,acceptInvites,
-  declineInvite};
+  declineInvite,getAccessToken};
